@@ -1,0 +1,887 @@
+{
+  "Madurai": {
+    "lat": 9.9252,
+    "lng": 78.1198,
+    "district": "Madurai"
+  },
+  "Melur": {
+    "lat": 10.0345,
+    "lng": 78.3341,
+    "district": "Madurai"
+  },
+  "Vadipatti": {
+    "lat": 10.0531,
+    "lng": 77.9622,
+    "district": "Madurai"
+  },
+  "Usilampatti": {
+    "lat": 9.9678,
+    "lng": 77.7944,
+    "district": "Madurai"
+  },
+  "Koyambedu": {
+    "lat": 13.0694,
+    "lng": 80.1948,
+    "district": "Chennai"
+  },
+  "Chennai": {
+    "lat": 13.0827,
+    "lng": 80.2707,
+    "district": "Chennai"
+  },
+  "Chengalpattu": {
+    "lat": 12.6939,
+    "lng": 79.9757,
+    "district": "Chengalpattu"
+  },
+  "Maduranthakam": {
+    "lat": 12.5113,
+    "lng": 79.8829,
+    "district": "Chengalpattu"
+  },
+  "Kanchipuram": {
+    "lat": 12.8342,
+    "lng": 79.7036,
+    "district": "Kanchipuram"
+  },
+  "Tiruvallur": {
+    "lat": 13.1432,
+    "lng": 79.9083,
+    "district": "Tiruvallur"
+  },
+  "Coimbatore": {
+    "lat": 11.0168,
+    "lng": 76.9558,
+    "district": "Coimbatore"
+  },
+  "Pollachi": {
+    "lat": 10.6609,
+    "lng": 77.0048,
+    "district": "Coimbatore"
+  },
+  "Mettupalayam": {
+    "lat": 11.3,
+    "lng": 76.95,
+    "district": "Coimbatore"
+  },
+  "Tiruppur": {
+    "lat": 11.1085,
+    "lng": 77.3411,
+    "district": "Tiruppur"
+  },
+  "Dharapuram": {
+    "lat": 10.73,
+    "lng": 77.53,
+    "district": "Tiruppur"
+  },
+  "Kangeyam": {
+    "lat": 11.0069,
+    "lng": 77.5614,
+    "district": "Tiruppur"
+  },
+  "Udumalaipettai": {
+    "lat": 10.5833,
+    "lng": 77.25,
+    "district": "Tiruppur"
+  },
+  "Erode": {
+    "lat": 11.341,
+    "lng": 77.7172,
+    "district": "Erode"
+  },
+  "Gobichettipalayam": {
+    "lat": 11.455,
+    "lng": 77.442,
+    "district": "Erode"
+  },
+  "Perundurai": {
+    "lat": 11.275,
+    "lng": 77.585,
+    "district": "Erode"
+  },
+  "Sathyamangalam": {
+    "lat": 11.5042,
+    "lng": 77.2403,
+    "district": "Erode"
+  },
+  "Salem": {
+    "lat": 11.6643,
+    "lng": 78.146,
+    "district": "Salem"
+  },
+  "Attur": {
+    "lat": 11.5975,
+    "lng": 78.5992,
+    "district": "Salem"
+  },
+  "Sankari": {
+    "lat": 11.48,
+    "lng": 77.87,
+    "district": "Salem"
+  },
+  "Dindigul": {
+    "lat": 10.3673,
+    "lng": 77.9803,
+    "district": "Dindigul"
+  },
+  "Oddanchatram": {
+    "lat": 10.4858,
+    "lng": 77.7475,
+    "district": "Dindigul"
+  },
+  "Palani": {
+    "lat": 10.45,
+    "lng": 77.52,
+    "district": "Dindigul"
+  },
+  "Theni": {
+    "lat": 10.0104,
+    "lng": 77.4768,
+    "district": "Theni"
+  },
+  "Cumbum": {
+    "lat": 9.7342,
+    "lng": 77.2817,
+    "district": "Theni"
+  },
+  "Bodinayakanur": {
+    "lat": 10.01,
+    "lng": 77.35,
+    "district": "Theni"
+  },
+  "Tiruchirappalli": {
+    "lat": 10.7905,
+    "lng": 78.7047,
+    "district": "Tiruchirappalli"
+  },
+  "Trichy": {
+    "lat": 10.7905,
+    "lng": 78.7047,
+    "district": "Tiruchirappalli"
+  },
+  "Manapparai": {
+    "lat": 10.6067,
+    "lng": 78.4147,
+    "district": "Tiruchirappalli"
+  },
+  "Thuraiyur": {
+    "lat": 11.1,
+    "lng": 78.6,
+    "district": "Tiruchirappalli"
+  },
+  "Karur": {
+    "lat": 10.9601,
+    "lng": 78.0766,
+    "district": "Karur"
+  },
+  "Kulithalai": {
+    "lat": 10.9333,
+    "lng": 78.4167,
+    "district": "Karur"
+  },
+  "Namakkal": {
+    "lat": 11.2189,
+    "lng": 78.1674,
+    "district": "Namakkal"
+  },
+  "Tiruchengode": {
+    "lat": 11.38,
+    "lng": 77.9,
+    "district": "Namakkal"
+  },
+  "Rasipuram": {
+    "lat": 11.4667,
+    "lng": 78.1667,
+    "district": "Namakkal"
+  },
+  "Thanjavur": {
+    "lat": 10.787,
+    "lng": 79.1378,
+    "district": "Thanjavur"
+  },
+  "Kumbakonam": {
+    "lat": 10.9602,
+    "lng": 79.3845,
+    "district": "Thanjavur"
+  },
+  "Pattukkottai": {
+    "lat": 10.4283,
+    "lng": 79.3175,
+    "district": "Thanjavur"
+  },
+  "Tiruvarur": {
+    "lat": 10.7719,
+    "lng": 79.6366,
+    "district": "Tiruvarur"
+  },
+  "Mannargudi": {
+    "lat": 10.6667,
+    "lng": 79.45,
+    "district": "Tiruvarur"
+  },
+  "Nagapattinam": {
+    "lat": 10.7672,
+    "lng": 79.8449,
+    "district": "Nagapattinam"
+  },
+  "Vedaranyam": {
+    "lat": 10.37,
+    "lng": 79.85,
+    "district": "Nagapattinam"
+  },
+  "Mayiladuthurai": {
+    "lat": 11.1075,
+    "lng": 79.6525,
+    "district": "Mayiladuthurai"
+  },
+  "Sirkazhi": {
+    "lat": 11.2333,
+    "lng": 79.7333,
+    "district": "Mayiladuthurai"
+  },
+  "Pudukkottai": {
+    "lat": 10.3833,
+    "lng": 78.8,
+    "district": "Pudukkottai"
+  },
+  "Aranthangi": {
+    "lat": 10.1667,
+    "lng": 78.9833,
+    "district": "Pudukkottai"
+  },
+  "Sivaganga": {
+    "lat": 9.8433,
+    "lng": 78.4809,
+    "district": "Sivaganga"
+  },
+  "Karaikudi": {
+    "lat": 10.07,
+    "lng": 78.78,
+    "district": "Sivaganga"
+  },
+  "Ramanathapuram": {
+    "lat": 9.3639,
+    "lng": 78.8395,
+    "district": "Ramanathapuram"
+  },
+  "Paramakudi": {
+    "lat": 9.5442,
+    "lng": 78.5911,
+    "district": "Ramanathapuram"
+  },
+  "Virudhunagar": {
+    "lat": 9.568,
+    "lng": 77.9624,
+    "district": "Virudhunagar"
+  },
+  "Rajapalayam": {
+    "lat": 9.4533,
+    "lng": 77.5539,
+    "district": "Virudhunagar"
+  },
+  "Aruppukkottai": {
+    "lat": 9.51,
+    "lng": 78.1,
+    "district": "Virudhunagar"
+  },
+  "Tirunelveli": {
+    "lat": 8.7139,
+    "lng": 77.7567,
+    "district": "Tirunelveli"
+  },
+  "Ambasamudram": {
+    "lat": 8.7,
+    "lng": 77.45,
+    "district": "Tirunelveli"
+  },
+  "Tenkasi": {
+    "lat": 8.9594,
+    "lng": 77.315,
+    "district": "Tenkasi"
+  },
+  "Sankarankovil": {
+    "lat": 9.17,
+    "lng": 77.53,
+    "district": "Tenkasi"
+  },
+  "Thoothukudi": {
+    "lat": 8.7642,
+    "lng": 78.1348,
+    "district": "Thoothukudi"
+  },
+  "Tuticorin": {
+    "lat": 8.7642,
+    "lng": 78.1348,
+    "district": "Thoothukudi"
+  },
+  "Kovilpatti": {
+    "lat": 9.17,
+    "lng": 77.87,
+    "district": "Thoothukudi"
+  },
+  "Nagercoil": {
+    "lat": 8.1833,
+    "lng": 77.4119,
+    "district": "Kanyakumari"
+  },
+  "Cuddalore": {
+    "lat": 11.748,
+    "lng": 79.7714,
+    "district": "Cuddalore"
+  },
+  "Panruti": {
+    "lat": 11.77,
+    "lng": 79.55,
+    "district": "Cuddalore"
+  },
+  "Chidambaram": {
+    "lat": 11.3992,
+    "lng": 79.6936,
+    "district": "Cuddalore"
+  },
+  "Villupuram": {
+    "lat": 11.9401,
+    "lng": 79.4861,
+    "district": "Villupuram"
+  },
+  "Tindivanam": {
+    "lat": 12.2333,
+    "lng": 79.65,
+    "district": "Villupuram"
+  },
+  "Kallakurichi": {
+    "lat": 11.7381,
+    "lng": 78.9631,
+    "district": "Kallakurichi"
+  },
+  "Tiruvannamalai": {
+    "lat": 12.2253,
+    "lng": 79.0747,
+    "district": "Tiruvannamalai"
+  },
+  "Arani": {
+    "lat": 12.67,
+    "lng": 79.28,
+    "district": "Tiruvannamalai"
+  },
+  "Vellore": {
+    "lat": 12.9165,
+    "lng": 79.1325,
+    "district": "Vellore"
+  },
+  "Gudiyatham": {
+    "lat": 12.95,
+    "lng": 78.87,
+    "district": "Vellore"
+  },
+  "Ranipet": {
+    "lat": 12.93,
+    "lng": 79.33,
+    "district": "Ranipet"
+  },
+  "Arakkonam": {
+    "lat": 13.08,
+    "lng": 79.67,
+    "district": "Ranipet"
+  },
+  "Tirupathur": {
+    "lat": 12.4925,
+    "lng": 78.5678,
+    "district": "Tirupathur"
+  },
+  "Dharmapuri": {
+    "lat": 12.1211,
+    "lng": 78.1582,
+    "district": "Dharmapuri"
+  },
+  "Harur": {
+    "lat": 12.06,
+    "lng": 78.49,
+    "district": "Dharmapuri"
+  },
+  "Krishnagiri": {
+    "lat": 12.5186,
+    "lng": 78.2137,
+    "district": "Krishnagiri"
+  },
+  "Hosur": {
+    "lat": 12.7409,
+    "lng": 77.8253,
+    "district": "Krishnagiri"
+  },
+  "Perambalur": {
+    "lat": 11.2333,
+    "lng": 78.8833,
+    "district": "Perambalur"
+  },
+  "Ariyalur": {
+    "lat": 11.1401,
+    "lng": 79.0786,
+    "district": "Ariyalur"
+  },
+  "Ooty": {
+    "lat": 11.4102,
+    "lng": 76.695,
+    "district": "Nilgiris"
+  },
+  "Coonoor": {
+    "lat": 11.353,
+    "lng": 76.7959,
+    "district": "Nilgiris"
+  },
+  "Thirumangalam": {
+    "lat": 9.8239,
+    "lng": 77.9892,
+    "district": "Madurai"
+  },
+  "Sholavandan": {
+    "lat": 10.0211,
+    "lng": 77.9622,
+    "district": "Madurai"
+  },
+  "Peraiyur": {
+    "lat": 9.7183,
+    "lng": 77.7958,
+    "district": "Madurai"
+  },
+  "Sulur": {
+    "lat": 11.0267,
+    "lng": 77.1267,
+    "district": "Coimbatore"
+  },
+  "Annur": {
+    "lat": 11.2333,
+    "lng": 77.1833,
+    "district": "Coimbatore"
+  },
+  "Thondamuthur": {
+    "lat": 10.9983,
+    "lng": 76.8306,
+    "district": "Coimbatore"
+  },
+  "Kinathukadavu": {
+    "lat": 10.8206,
+    "lng": 77.0206,
+    "district": "Coimbatore"
+  },
+  "Palladam": {
+    "lat": 11.0044,
+    "lng": 77.2847,
+    "district": "Tiruppur"
+  },
+  "Avinashi": {
+    "lat": 11.1925,
+    "lng": 77.2689,
+    "district": "Tiruppur"
+  },
+  "Madathukulam": {
+    "lat": 10.575,
+    "lng": 77.375,
+    "district": "Tiruppur"
+  },
+  "Bhavani": {
+    "lat": 11.45,
+    "lng": 77.6833,
+    "district": "Erode"
+  },
+  "Kodumudi": {
+    "lat": 11.08,
+    "lng": 77.88,
+    "district": "Erode"
+  },
+  "Modakkurichi": {
+    "lat": 11.25,
+    "lng": 77.77,
+    "district": "Erode"
+  },
+  "Mettur": {
+    "lat": 11.79,
+    "lng": 77.8,
+    "district": "Salem"
+  },
+  "Omalur": {
+    "lat": 11.74,
+    "lng": 78.04,
+    "district": "Salem"
+  },
+  "Edappadi": {
+    "lat": 11.58,
+    "lng": 77.85,
+    "district": "Salem"
+  },
+  "Vazhapadi": {
+    "lat": 11.65,
+    "lng": 78.4,
+    "district": "Salem"
+  },
+  "Natham": {
+    "lat": 10.22,
+    "lng": 78.23,
+    "district": "Dindigul"
+  },
+  "Nilakkottai": {
+    "lat": 10.16,
+    "lng": 77.86,
+    "district": "Dindigul"
+  },
+  "Vedasandur": {
+    "lat": 10.53,
+    "lng": 77.95,
+    "district": "Dindigul"
+  },
+  "Kodaikanal": {
+    "lat": 10.2381,
+    "lng": 77.4892,
+    "district": "Dindigul"
+  },
+  "Periyakulam": {
+    "lat": 10.12,
+    "lng": 77.55,
+    "district": "Theni"
+  },
+  "Andipatti": {
+    "lat": 9.99,
+    "lng": 77.62,
+    "district": "Theni"
+  },
+  "Uthamapalayam": {
+    "lat": 9.81,
+    "lng": 77.33,
+    "district": "Theni"
+  },
+  "Musiri": {
+    "lat": 10.96,
+    "lng": 78.45,
+    "district": "Tiruchirappalli"
+  },
+  "Lalgudi": {
+    "lat": 10.87,
+    "lng": 78.82,
+    "district": "Tiruchirappalli"
+  },
+  "Thottiyam": {
+    "lat": 11.0,
+    "lng": 78.33,
+    "district": "Tiruchirappalli"
+  },
+  "Aravakurichi": {
+    "lat": 10.77,
+    "lng": 77.91,
+    "district": "Karur"
+  },
+  "Paramathi Velur": {
+    "lat": 11.05,
+    "lng": 78.01,
+    "district": "Namakkal"
+  },
+  "Thiruvaiyaru": {
+    "lat": 10.88,
+    "lng": 79.1,
+    "district": "Thanjavur"
+  },
+  "Orathanadu": {
+    "lat": 10.63,
+    "lng": 79.25,
+    "district": "Thanjavur"
+  },
+  "Thiruthuraipoondi": {
+    "lat": 10.53,
+    "lng": 79.65,
+    "district": "Tiruvarur"
+  },
+  "Nannilam": {
+    "lat": 10.88,
+    "lng": 79.62,
+    "district": "Tiruvarur"
+  },
+  "Kilvelur": {
+    "lat": 10.72,
+    "lng": 79.77,
+    "district": "Nagapattinam"
+  },
+  "Tharangambadi": {
+    "lat": 11.03,
+    "lng": 79.85,
+    "district": "Mayiladuthurai"
+  },
+  "Alangudi": {
+    "lat": 10.36,
+    "lng": 78.98,
+    "district": "Pudukkottai"
+  },
+  "Gandarvakottai": {
+    "lat": 10.55,
+    "lng": 79.02,
+    "district": "Pudukkottai"
+  },
+  "Devakottai": {
+    "lat": 9.95,
+    "lng": 78.82,
+    "district": "Sivaganga"
+  },
+  "Manamadurai": {
+    "lat": 9.7,
+    "lng": 78.45,
+    "district": "Sivaganga"
+  },
+  "Rameswaram": {
+    "lat": 9.2876,
+    "lng": 79.3129,
+    "district": "Ramanathapuram"
+  },
+  "Mudukulathur": {
+    "lat": 9.34,
+    "lng": 78.51,
+    "district": "Ramanathapuram"
+  },
+  "Sivakasi": {
+    "lat": 9.45,
+    "lng": 77.8,
+    "district": "Virudhunagar"
+  },
+  "Srivilliputhur": {
+    "lat": 9.51,
+    "lng": 77.63,
+    "district": "Virudhunagar"
+  },
+  "Nanguneri": {
+    "lat": 8.48,
+    "lng": 77.66,
+    "district": "Tirunelveli"
+  },
+  "Radhapuram": {
+    "lat": 8.31,
+    "lng": 77.69,
+    "district": "Tirunelveli"
+  },
+  "Alangulam": {
+    "lat": 8.87,
+    "lng": 77.5,
+    "district": "Tenkasi"
+  },
+  "Kadayanallur": {
+    "lat": 9.07,
+    "lng": 77.34,
+    "district": "Tenkasi"
+  },
+  "Tiruchendur": {
+    "lat": 8.49,
+    "lng": 78.12,
+    "district": "Thoothukudi"
+  },
+  "Vilathikulam": {
+    "lat": 9.13,
+    "lng": 78.17,
+    "district": "Thoothukudi"
+  },
+  "Srivaikuntam": {
+    "lat": 8.62,
+    "lng": 77.91,
+    "district": "Thoothukudi"
+  },
+  "Thuckalay": {
+    "lat": 8.24,
+    "lng": 77.32,
+    "district": "Kanyakumari"
+  },
+  "Kuzhithurai": {
+    "lat": 8.32,
+    "lng": 77.19,
+    "district": "Kanyakumari"
+  },
+  "Colachel": {
+    "lat": 8.18,
+    "lng": 77.26,
+    "district": "Kanyakumari"
+  },
+  "Virudhachalam": {
+    "lat": 11.5,
+    "lng": 79.33,
+    "district": "Cuddalore"
+  },
+  "Neyveli": {
+    "lat": 11.59,
+    "lng": 79.48,
+    "district": "Cuddalore"
+  },
+  "Kattumannarkoil": {
+    "lat": 11.27,
+    "lng": 79.55,
+    "district": "Cuddalore"
+  },
+  "Gingee": {
+    "lat": 12.25,
+    "lng": 79.42,
+    "district": "Villupuram"
+  },
+  "Vanur": {
+    "lat": 12.01,
+    "lng": 79.72,
+    "district": "Villupuram"
+  },
+  "Marakkanam": {
+    "lat": 12.2,
+    "lng": 79.95,
+    "district": "Villupuram"
+  },
+  "Ulundurpet": {
+    "lat": 11.69,
+    "lng": 79.29,
+    "district": "Kallakurichi"
+  },
+  "Sankarapuram": {
+    "lat": 11.89,
+    "lng": 78.91,
+    "district": "Kallakurichi"
+  },
+  "Tirukoilur": {
+    "lat": 11.97,
+    "lng": 79.2,
+    "district": "Kallakurichi"
+  },
+  "Cheyyar": {
+    "lat": 12.66,
+    "lng": 79.54,
+    "district": "Tiruvannamalai"
+  },
+  "Polur": {
+    "lat": 12.5,
+    "lng": 79.13,
+    "district": "Tiruvannamalai"
+  },
+  "Vandavasi": {
+    "lat": 12.5,
+    "lng": 79.61,
+    "district": "Tiruvannamalai"
+  },
+  "Katpadi": {
+    "lat": 12.98,
+    "lng": 79.14,
+    "district": "Vellore"
+  },
+  "Pernambut": {
+    "lat": 12.93,
+    "lng": 78.71,
+    "district": "Vellore"
+  },
+  "Walajah": {
+    "lat": 12.98,
+    "lng": 79.36,
+    "district": "Ranipet"
+  },
+  "Sholinghur": {
+    "lat": 13.11,
+    "lng": 79.43,
+    "district": "Ranipet"
+  },
+  "Vaniyambadi": {
+    "lat": 12.68,
+    "lng": 78.62,
+    "district": "Tirupathur"
+  },
+  "Ambur": {
+    "lat": 12.79,
+    "lng": 78.71,
+    "district": "Tirupathur"
+  },
+  "Natrampalli": {
+    "lat": 12.56,
+    "lng": 78.53,
+    "district": "Tirupathur"
+  },
+  "Palacode": {
+    "lat": 12.3,
+    "lng": 78.08,
+    "district": "Dharmapuri"
+  },
+  "Pennagaram": {
+    "lat": 12.13,
+    "lng": 77.9,
+    "district": "Dharmapuri"
+  },
+  "Pappireddipatti": {
+    "lat": 11.91,
+    "lng": 78.36,
+    "district": "Dharmapuri"
+  },
+  "Denkanikottai": {
+    "lat": 12.52,
+    "lng": 77.78,
+    "district": "Krishnagiri"
+  },
+  "Pochampalli": {
+    "lat": 12.33,
+    "lng": 78.36,
+    "district": "Krishnagiri"
+  },
+  "Uthangarai": {
+    "lat": 12.27,
+    "lng": 78.54,
+    "district": "Krishnagiri"
+  },
+  "Veppanthattai": {
+    "lat": 11.32,
+    "lng": 78.83,
+    "district": "Perambalur"
+  },
+  "Kunnam": {
+    "lat": 11.23,
+    "lng": 79.02,
+    "district": "Perambalur"
+  },
+  "Jayankondam": {
+    "lat": 11.21,
+    "lng": 79.31,
+    "district": "Ariyalur"
+  },
+  "Sendurai": {
+    "lat": 11.27,
+    "lng": 79.17,
+    "district": "Ariyalur"
+  },
+  "Kotagiri": {
+    "lat": 11.43,
+    "lng": 76.88,
+    "district": "Nilgiris"
+  },
+  "Gudalur": {
+    "lat": 11.5,
+    "lng": 76.5,
+    "district": "Nilgiris"
+  },
+  "Tambaram": {
+    "lat": 12.9249,
+    "lng": 80.1,
+    "district": "Chengalpattu"
+  },
+  "Madhavaram": {
+    "lat": 13.1489,
+    "lng": 80.2314,
+    "district": "Chennai"
+  },
+  "Alandur": {
+    "lat": 12.9975,
+    "lng": 80.2006,
+    "district": "Chennai"
+  },
+  "Poonamallee": {
+    "lat": 13.0489,
+    "lng": 80.0939,
+    "district": "Tiruvallur"
+  },
+  "Avadi": {
+    "lat": 13.1147,
+    "lng": 80.0982,
+    "district": "Tiruvallur"
+  },
+  "Gummidipoondi": {
+    "lat": 13.4072,
+    "lng": 80.1283,
+    "district": "Tiruvallur"
+  },
+  "Sriperumbudur": {
+    "lat": 12.9667,
+    "lng": 79.95,
+    "district": "Kanchipuram"
+  }
+}

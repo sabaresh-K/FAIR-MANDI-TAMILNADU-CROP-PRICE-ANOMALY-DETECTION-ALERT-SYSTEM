@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">விலை ஆய்வு & 7 நாள் கணிப்பு | Fair Mandi</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3.0 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Chart.js 4.4.0 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --primary-dark: #1b5e20;
+      --primary-mid: #2e7d32;
+      --primary-light: #e8f5e9;
+      --accent-gold: #f57c00;
+      --text-dark: #1a1a1a;
+      --bg-page: #f8faf8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation */
+    .navbar-custom {
+      background-color: var(--primary-dark);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #ffffff !important;
+      background-color: rgba(255,255,255,0.15);
+    }
+
+    /* Cards & Panels */
+    .filter-panel, .analytics-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 18px 22px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      border: 1px solid #e2e8e2;
+    }
+
+    /* Crop Pills */
+    .crop-pill {
+      border: 1px solid #c8e6c9;
+      background: #ffffff;
+      color: var(--primary-dark);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .crop-pill:hover, .crop-pill.active {
+      background: var(--primary-mid);
+      color: #ffffff;
+      border-color: var(--primary-mid);
+    }
+
+    /* Stat Cards */
+    .stat-badge-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      border-left: 4px solid var(--primary-mid);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      border-top: 1px solid #eef2ee;
+      border-right: 1px solid #eef2ee;
+      border-bottom: 1px solid #eef2ee;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top py-2">
+    <div class="container-fluid px-3 px-lg-4">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-white fs-5" href="/dashboard/index.html">
+        <span style="font-size: 1.5rem;">🌾</span>
+        <span id="navLogoText">Fair Mandi</span>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 gap-lg-2">
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 rounded-3 fw-semibold" href="/dashboard/index.html">
+              <span>🏠</span> <span class="nav-text" data-ta="முகப்பு" data-en="Overview">முகப்பு</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 rounded-3 fw-semibold" href="/dashboard/map.html">
+              <span>🗺️</span> <span class="nav-text" data-ta="நேரலை வரைபடம்" data-en="Live Map">நேரலை வரைபடம்</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 rounded-3 fw-semibold active" href="/dashboard/analytics.html">
+              <span>📊</span> <span class="nav-text" data-ta="விலை ஆய்வு & கணிப்பு" data-en="Analytics & Forecast">விலை ஆய்வு & கணிப்பு</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 rounded-3 fw-semibold" href="/dashboard/profile.html">
+              <span>👤</span> <span class="nav-text" data-ta="சுயவிவரம் & எச்சரிக்கை" data-en="Profile & Alerts">சுயவிவரம் & எச்சரிக்கை</span>
+            </a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-2 flex-wrap mt-2 mt-lg-0">
+          <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle rounded-pill py-2 px-3 small d-flex align-items-center gap-1">
+            <span style="color:#2e7d32;">●</span> <span id="navLiveFeedBadge">24/7 சந்தை நேரலை</span>
+          </span>
+          <button class="btn btn-outline-light btn-sm rounded-pill px-3 fw-bold" onclick="toggleLanguage()" id="btnLangToggle">
+            English
+          </button>
+          <div id="navUserContainer"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container-fluid px-3 px-lg-4 py-3 flex-grow-1">
+
+    <!-- Top Selection & Filter Bar -->
+    <div class="filter-panel mb-3">
+      <div class="row g-3 align-items-center">
+        <!-- Mandi Search & Select -->
+        <div class="col-lg-4 col-md-6">
+          <label class="form-label fw-bold small text-secondary mb-1" id="lblSelectMandi">
+            📍 சந்தையைத் தேர்ந்தெடுக்கவும்:
+          </label>
+          <div class="position-relative">
+            <input type="text" class="form-control fw-semibold" id="mandiSearchInput" placeholder="சந்தை பெயரை தட்டச்சு செய்க..." autocomplete="off">
+            <div id="mandiSuggestions" class="list-group position-absolute w-100 shadow-sm d-none" style="z-index: 1050; max-height: 250px; overflow-y: auto;"></div>
+          </div>
+        </div>
+
+        <!-- Crop Quick Selection Pills -->
+        <div class="col-lg-8 col-md-6">
+          <label class="form-label fw-bold small text-secondary mb-1" id="lblSelectCrop">
+            🌾 பயிரைத் தேர்ந்தெடுக்கவும்:
+          </label>
+          <div class="d-flex gap-2 overflow-x-auto pb-1" id="cropPillsContainer">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats Cards Row -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-3 col-6">
+        <div class="stat-badge-card" style="border-left-color: #2e7d32;">
+          <div class="small text-muted" id="statLblToday">இன்றைய சந்தை விலை</div>
+          <div class="fs-4 fw-bold text-success" id="statValToday">₹-</div>
+          <div class="small text-secondary" id="statSubToday">நாள் மாற்றம்: -</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-badge-card" style="border-left-color: #1976d2;">
+          <div class="small text-muted" id="statLblAvg">14 நாட்கள் சராசரி விலை</div>
+          <div class="fs-4 fw-bold text-primary" id="statValAvg">₹-</div>
+          <div class="small text-secondary" id="statSubAvg">அடிப்படை சராசரி</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-badge-card" style="border-left-color: #f57c00;">
+          <div class="small text-muted" id="statLblForecast">7 நாள் மாதிரி கணிப்பு</div>
+          <div class="fs-4 fw-bold text-warning" id="statValForecast">₹-</div>
+          <div class="small text-secondary" id="statSubForecast">எதிர்பார்க்கப்படும் போக்கு</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-badge-card" style="border-left-color: #7b1fa2;">
+          <div class="small text-muted" id="statLblVolatility">சந்தை விலை நிலைத்தன்மை</div>
+          <div class="fs-4 fw-bold text-purple" style="color: #7b1fa2;" id="statValVolatility">மிதமானது</div>
+          <div class="small text-secondary" id="statSubVolatility">பருவகால சுழற்சி</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Interactive Trend & Forecast Chart Card -->
+    <div class="analytics-card mb-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3 pb-2 border-bottom">
+        <div>
+          <h5 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+            <span>📈</span>
+            <span id="chartCardHeading">14 நாட்கள் உண்மையான விலை மற்றும் 7 நாட்கள் மாதிரி கணிப்பு வரைபடம்</span>
+          </h5>
+          <div class="small text-muted" id="chartCardSub">கடந்த கால அசைவு மற்றும் அடுத்த வார விலைப் போக்கு</div>
+        </div>
+        <span class="badge bg-success px-3 py-2 rounded-pill fs-6" id="chartCropMandiBadge">
+          தக்காளி - மதுரை
+        </span>
+      </div>
+
+      <div style="position: relative; height: 380px; width: 100%;">
+        <canvas id="analyticsChart"></canvas>
+      </div>
+
+      <div class="d-flex justify-content-center gap-4 mt-3 small text-secondary fw-bold flex-wrap">
+        <span><span style="color:#2e7d32; font-size:1.2rem;">●</span> <span id="legendActual">உண்மையான சந்தை விலை</span></span>
+        <span><span style="color:#1976d2; font-size:1.2rem;">―</span> <span id="legendTrend">அடிப்படை போக்கு</span></span>
+        <span><span style="color:#f57c00; font-size:1.2rem;">••</span> <span id="legendForecast">7 நாள் மாதிரி கணிப்பு</span></span>
+      </div>
+    </div>
+
+    <!-- Dual Tables: Past 7 Days History & Next 7 Days Forecast -->
+    <div class="row g-3">
+      <!-- Past 7 Days History Table -->
+      <div class="col-lg-6">
+        <div class="analytics-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+            <h6 class="fw-bold text-dark m-0" id="histTableTitle">
+              📅 கடந்த 7 நாட்கள் நாள் வாரியாக விலை மாற்றம்
+            </h6>
+            <span class="badge bg-primary rounded-pill px-2 py-1" id="badgeHistPill">வரலாறு</span>
+          </div>
+          <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+            <table class="table table-sm table-hover align-middle border text-center mb-0" style="font-size: 0.85rem;">
+              <thead class="table-light sticky-top">
+                <tr>
+                  <th id="thHistDate">தேதி</th>
+                  <th id="thHistPrice">சந்தை விலை (ரூ/குவி)</th>
+                  <th id="thHistRange">குறைந்தபட்சம் - அதிகபட்சம்</th>
+                  <th id="thHistChange">நாள் மாற்றம்</th>
+                </tr>
+              </thead>
+              <tbody id="pastHistoryTableBody">
+                <tr><td colspan="4" class="text-center py-4 text-muted">தரவுகள் ஏற்றப்படுகின்றன...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="small text-muted text-center mt-2" id="footerNoteHist">
+            * விலை ஒரு குவிண்டாலுக்கு (100 கிலோ)
+          </div>
+        </div>
+      </div>
+
+      <!-- Next 7 Days Forecast Table -->
+      <div class="col-lg-6">
+        <div class="analytics-card h-100">
+          <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+            <h6 class="fw-bold text-dark m-0" id="forecastTableTitle">
+              🔮 அடுத்த 7 நாட்கள் விலை கணிப்பு விவரங்கள்
+            </h6>
+            <span class="badge bg-warning text-dark rounded-pill px-2 py-1" id="badgeFcPill">AI கணிப்பு</span>
+          </div>
+          <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+            <table class="table table-sm table-hover align-middle border text-center mb-0" style="font-size: 0.85rem;">
+              <thead class="table-light sticky-top">
+                <tr>
+                  <th id="thFcDate">தேதி</th>
+                  <th id="thFcDay">கிழமை</th>
+                  <th id="thFcPrice">கணிக்கப்பட்ட விலை (ரூ/குவி)</th>
+                  <th id="thFcTrend">எதிர்பார்க்கப்படும் போக்கு</th>
+                </tr>
+              </thead>
+              <tbody id="futureForecastTableBody">
+                <tr><td colspan="4" class="text-center py-4 text-muted">கணிப்பு ஏற்றப்படுகிறது...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="small text-muted text-center mt-2" id="footerNoteFc">
+            * முந்தைய 14 நாட்கள் சந்தை சுழற்சி அடிப்படையில் கணிக்கப்பட்டது
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-top py-2 text-center text-muted small mt-auto">
+    <span id="footerBrandNote">Fair Mandi — விலை ஆய்வு & 7 நாள் கணிப்பு முறைமை | 2026</span>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let currentLang = localStorage.getItem("tn_mandi_lang") || "ta";
+    let currentCrop = localStorage.getItem("selected_crop") || "Tomato";
+    let currentMarket = localStorage.getItem("selected_mandi") || "";
+    let allMarkets = [];
+    let loggedInUser = null;
+    let analyticsChartInstance = null;
+
+    const CROPS = [
+      { id: "Tomato", ta: "தக்காளி", en: "Tomato" },
+      { id: "Onion", ta: "வெங்காயம்", en: "Onion" },
+      { id: "Rice", ta: "நெல்", en: "Paddy" },
+      { id: "Potato", ta: "உருளைக்கிழங்கு", en: "Potato" },
+      { id: "Banana", ta: "வாழைப்பழம்", en: "Banana" },
+      { id: "Green Chilli", ta: "பச்சை மிளகாய்", en: "Green Chilli" },
+      { id: "Brinjal", ta: "கத்திரிக்காய்", en: "Brinjal" },
+      { id: "Carrot", ta: "கேரட்", en: "Carrot" },
+      { id: "Coconut", ta: "தேங்காய்", en: "Coconut" },
+      { id: "Ladies Finger", ta: "வெண்டைக்காய்", en: "Ladies Finger" },
+      { id: "Garlic", ta: "பூண்டு", en: "Garlic" },
+      { id: "Ginger", ta: "இஞ்சி", en: "Ginger" },
+      { id: "Cabbage", ta: "முட்டைக்கோஸ்", en: "Cabbage" },
+      { id: "Cauliflower", ta: "காலிஃபிளவர்", en: "Cauliflower" },
+      { id: "Drumstick", ta: "முருங்கைக்காய்", en: "Drumstick" },
+      { id: "Beetroot", ta: "பீட்ரூட்", en: "Beetroot" },
+      { id: "Coriander", ta: "கொத்தமல்லி", en: "Coriander" },
+      { id: "Mango", ta: "மாம்பழம்", en: "Mango" },
+      { id: "Turmeric", ta: "மஞ்சள்", en: "Turmeric" },
+      { id: "Cotton", ta: "பருத்தி", en: "Cotton" }
+    ];
+
+    const DISTRICTS_TA = {
+      "Ariyalur": "அரியலூர்", "Chengalpattu": "செங்கல்பட்டு", "Chennai": "சென்னை",
+      "Coimbatore": "கோயம்புத்தூர்", "Cuddalore": "கடலூர்", "Dharmapuri": "தர்மபுரி",
+      "Dindigul": "திண்டுக்கல்", "Erode": "ஈரோடு", "Kallakurichi": "கள்ளக்குறிச்சி",
+      "Kanchipuram": "காஞ்சிபுரம்", "Kanyakumari": "கன்னியாகுமரி", "Karur": "கரூர்",
+      "Krishnagiri": "கிருஷ்ணகிரி", "Madurai": "மதுரை", "Mayiladuthurai": "மயிலாடுதுறை",
+      "Nagapattinam": "நாகப்பட்டினம்", "Namakkal": "நாமக்கல்", "Nilgiris": "நீலகிரி",
+      "Perambalur": "பெரம்பலூர்", "Pudukkottai": "புதுக்கோட்டை", "Ramanathapuram": "ராமநாதபுரம்",
+      "Ranipet": "ராணிப்பேட்டை", "Salem": "சேலம்", "Sivaganga": "சிவகங்கை",
+      "Tenkasi": "தென்காசி", "Thanjavur": "தஞ்சாவூர்", "Theni": "தேனி",
+      "Thoothukudi": "தூத்துக்குடி", "Tiruchirappalli": "திருச்சிராப்பள்ளி",
+      "Tirunelveli": "திருநெல்வேலி", "Tirupathur": "திருப்பத்தூர்", "Tiruppur": "திருப்பூர்",
+      "Tiruvallur": "திருவள்ளூர்", "Tiruvannamalai": "திருவண்ணாமலை", "Tiruvarur": "திருவாரூர்",
+      "Vellore": "வேலூர்", "Viluppuram": "விழுப்புரம்", "Virudhunagar": "விருதுநகர்"
+    };
+
+    const MANDIS_TA = {
+      "Madurai": "மதுரை", "Melur": "மேலூர்", "Vadipatti": "வாடிப்பட்டி", "Tirumangalam": "திருமங்கலம்",
+      "Usilampatti": "உசிலம்பட்டி", "Coimbatore": "கோயம்புத்தூர்", "Pollachi": "பொள்ளாச்சி",
+      "Annur": "அன்னூர்", "Mettupalayam": "மேட்டுப்பாளையம்", "Salem": "சேலம்", "Attur": "ஆத்தூர்",
+      "Sankari": "சங்ககிரி", "Edappadi": "எடப்பாடி", "Erode": "ஈரோடு", "Gobichettipalayam": "கோபிசெட்டிபாளையம்",
+      "Bhavani": "பவானி", "Kodumudi": "கொடுமுடி", "Perundurai": "பெருந்துறை", "Sathyamangalam": "சத்தியமங்கலம்",
+      "Dindigul": "திண்டுக்கல்", "Palani": "பழனி", "Oddanchatram": "ஒட்டன்சத்திரம்", "Natham": "நத்தம்",
+      "Kodaikanal": "கொடைக்கானல்", "Thanjavur": "தஞ்சாவூர்", "Kumbakonam": "கும்பகோணம்",
+      "Pattukkottai": "பட்டுக்கோட்டை", "Tiruchirappalli": "திருச்சிராப்பள்ளி", "Manapparai": "மணப்பாறை",
+      "Thuraiyur": "துறையூர்", "Tirunelveli": "திருநெல்வேலி", "Ambasamudram": "அம்பாசமுத்திரம்",
+      "Tenkasi": "தென்காசி", "Sankarankovil": "சங்கரன்கோவில்", "Theni": "தேனி", "Periyakulam": "பெரியகுளம்",
+      "Bodinayakanur": "போடிநாயக்கனூர்", "Cumbum": "கம்பம்", "Dharmapuri": "தர்மபுரி", "Harur": "அரூர்",
+      "Palacode": "பாலக்கோடு", "Pennagaram": "பெண்ணாகரம்", "Krishnagiri": "கிருஷ்ணகிரி", "Hosur": "ஓசூர்",
+      "Pochampalli": "போச்சம்பள்ளி", "Denkanikottai": "தேன்கனிக்கோட்டை", "Villupuram": "விழுப்புரம்",
+      "Tindivanam": "திண்டிவனம்", "Kallakurichi": "கள்ளக்குறிச்சி", "Vellore": "வேலூர்",
+      "Gudiyatham": "குடியாத்தம்", "Ambur": "ஆம்பூர்", "Tirupathur": "திருப்பத்தூர்", "Vaniyambadi": "வாணியம்பாடி",
+      "Koyambedu": "கோயம்பேடு", "Thiruvanmiyur": "திருவான்மியூர்"
+    };
+
+    function getDistrictName(dist) {
+      if (!dist) return "";
+      if (currentLang === 'ta') {
+        const ta = DISTRICTS_TA[dist] || dist;
+        return ta.endsWith("மாவட்டம்") ? ta : `${ta} மாவட்டம்`;
+      }
+      return `${dist} District`;
+    }
+
+    function getMandiDisplayName(mandi) {
+      if (!mandi) return "";
+      if (currentLang === 'ta') {
+        return MANDIS_TA[mandi] || mandi;
+      }
+      return mandi;
+    }
+
+    const DAYS_TA = { 0: "ஞாயிறு", 1: "திங்கள்", 2: "செவ்வாய்", 3: "புதன்", 4: "வியாழன்", 5: "வெள்ளி", 6: "சனி" };
+    const DAYS_EN = { 0: "Sunday", 1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday" };
+    const DAYS_SHORT_EN = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      renderCropPills();
+      await checkAuthSession();
+      await fetchMarkets();
+      updateLanguageUI();
+    });
+
+    async function checkAuthSession() {
+      const token = localStorage.getItem("tn_mandi_token");
+      const userContainer = document.getElementById("navUserContainer");
+      if (!token) {
+        if (userContainer) {
+          userContainer.innerHTML = currentLang === 'ta'
+            ? `<a href="/dashboard/login.html" class="btn btn-light btn-sm rounded-pill fw-bold text-success px-3">👤 உள்நுழைக</a>`
+            : `<a href="/dashboard/login.html" class="btn btn-light btn-sm rounded-pill fw-bold text-success px-3">👤 Login</a>`;
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/auth/me?token=${encodeURIComponent(token)}`);
+        if (res.ok) {
+          const data = await res.json();
+          loggedInUser = data.user;
+          if (!currentMarket && loggedInUser.preferred_mandi) {
+            currentMarket = loggedInUser.preferred_mandi;
+            localStorage.setItem("selected_mandi", currentMarket);
+          }
+          if (userContainer) {
+            const myProfileText = currentLang === 'ta' ? "👤 என் சுயவிவரம்" : "👤 My Profile";
+            const logoutText = currentLang === 'ta' ? "🚪 வெளியேறு" : "🚪 Logout";
+            userContainer.innerHTML = `
+              <div class="dropdown">
+                <button class="btn btn-outline-light btn-sm dropdown-toggle rounded-pill px-3 fw-bold" type="button" data-bs-toggle="dropdown">
+                  🌾 ${loggedInUser.full_name.split(' ')[0]}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow">
+                  <li><a class="dropdown-item small" href="/dashboard/profile.html">${myProfileText}</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><button class="dropdown-item small text-danger" onclick="logoutFarmer()">${logoutText}</button></li>
+                </ul>
+              </div>
+            `;
+          }
+        }
+      } catch (e) {
+        console.warn("Auth check failed:", e);
+      }
+    }
+
+    function logoutFarmer() {
+      localStorage.removeItem("tn_mandi_token");
+      localStorage.removeItem("tn_mandi_user");
+      window.location.reload();
+    }
+
+    function renderCropPills() {
+      const container = document.getElementById("cropPillsContainer");
+      if (!container) return;
+      container.innerHTML = CROPS.map(c => `
+        <button class="crop-pill ${c.id === currentCrop ? 'active' : ''}" onclick="onCropChange('${c.id}')">
+          ${currentLang === 'ta' ? c.ta : c.en}
+        </button>
+      `).join("");
+    }
+
+    async function fetchMarkets() {
+      try {
+        const res = await fetch("/markets-detailed");
+        if (res.ok) {
+          allMarkets = await res.json();
+          if (!currentMarket && allMarkets.length > 0) {
+            currentMarket = allMarkets[0].market;
+            localStorage.setItem("selected_mandi", currentMarket);
+          }
+          setupMandiSearch();
+          await loadAnalyticsData();
+        }
+      } catch (e) {
+        console.error("Error fetching markets:", e);
+      }
+    }
+
+    function setupMandiSearch() {
+      const input = document.getElementById("mandiSearchInput");
+      const suggestions = document.getElementById("mandiSuggestions");
+      if (!input || !suggestions) return;
+
+      input.value = getMandiDisplayName(currentMarket);
+
+      input.addEventListener("input", (e) => {
+        const val = e.target.value.toLowerCase().trim();
+        if (!val) {
+          suggestions.classList.add("d-none");
+          return;
+        }
+        const matches = allMarkets.filter(m => 
+          m.market.toLowerCase().includes(val) || 
+          (m.district && m.district.toLowerCase().includes(val)) ||
+          (MANDIS_TA[m.market] && MANDIS_TA[m.market].toLowerCase().includes(val)) ||
+          (DISTRICTS_TA[m.district] && DISTRICTS_TA[m.district].toLowerCase().includes(val))
+        ).slice(0, 8);
+
+        if (matches.length > 0) {
+          suggestions.innerHTML = matches.map(m => `
+            <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2" onclick="selectMandi('${m.market}')">
+              <span><strong>${getMandiDisplayName(m.market)}</strong></span>
+              <span class="badge bg-light text-secondary border">${getDistrictName(m.district) || 'TN'}</span>
+            </button>
+          `).join("");
+          suggestions.classList.remove("d-none");
+        } else {
+          suggestions.classList.add("d-none");
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+          suggestions.classList.add("d-none");
+        }
+      });
+    }
+
+    function selectMandi(marketName) {
+      currentMarket = marketName;
+      localStorage.setItem("selected_mandi", currentMarket);
+      document.getElementById("mandiSearchInput").value = getMandiDisplayName(currentMarket);
+      document.getElementById("mandiSuggestions").classList.add("d-none");
+      loadAnalyticsData();
+    }
+
+    async function onCropChange(cropId) {
+      currentCrop = cropId;
+      localStorage.setItem("selected_crop", currentCrop);
+      renderCropPills();
+      await loadAnalyticsData();
+    }
+
+    async function loadAnalyticsData() {
+      if (!currentMarket || !currentCrop) return;
+
+      const cropObj = CROPS.find(c => c.id === currentCrop) || { ta: currentCrop, en: currentCrop };
+      const cropLabel = currentLang === 'ta' ? cropObj.ta : cropObj.en;
+      const mandiLabel = getMandiDisplayName(currentMarket);
+      const badge = document.getElementById("chartCropMandiBadge");
+      if (badge) badge.innerText = `${cropLabel} - ${mandiLabel}`;
+
+      try {
+        let historyData = null;
+        let forecastData = null;
+
+        // Fetch History
+        try {
+          let histRes = await fetch(`/history/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
+          if (!histRes.ok) {
+            histRes = await fetch(`/prices/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
+          }
+          if (histRes.ok) {
+            historyData = await histRes.json();
+          }
+        } catch (err) {
+          console.warn("History fetch error:", err);
+        }
+
+        // Fetch Forecast
+        try {
+          let fcRes = await fetch(`/forecast/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
+          if (fcRes.ok) {
+            forecastData = await fcRes.json();
+          } else {
+            const decRes = await fetch(`/decision/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
+            if (decRes.ok) {
+              const decData = await decRes.json();
+              forecastData = {
+                forecast: decData.forecast_7days || [],
+                commodity: currentCrop,
+                market: currentMarket
+              };
+            }
+          }
+        } catch (err) {
+          console.warn("Forecast fetch error:", err);
+        }
+
+        if (historyData && Array.isArray(historyData) && historyData.length > 0) {
+          renderChart(historyData, forecastData);
+          renderPastHistoryTable(historyData);
+          renderFutureForecastTable(forecastData, historyData);
+          updateQuickStatCards(historyData, forecastData);
+        } else {
+          document.getElementById("pastHistoryTableBody").innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">${currentLang === 'ta' ? 'விலை தரவு கிடைக்கவில்லை.' : 'No price records found.'}</td></tr>`;
+          document.getElementById("futureForecastTableBody").innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">${currentLang === 'ta' ? 'கணிப்பு தரவு கிடைக்கவில்லை.' : 'No forecast records found.'}</td></tr>`;
+        }
+
+      } catch (e) {
+        console.error("Error loading analytics data:", e);
+      }
+    }
+
+    function updateQuickStatCards(historyData, forecastData) {
+      if (!historyData || historyData.length === 0) return;
+      const latest = historyData[historyData.length - 1];
+      const todayPrice = latest.modal_price || 0;
+      const dodChange = latest.pct_change_dod || 0;
+      const currSymbol = currentLang === 'ta' ? 'ரூ ' : '₹';
+
+      document.getElementById("statValToday").innerText = `${currSymbol}${Math.round(todayPrice).toLocaleString()}`;
+      
+      const dodPrefix = currentLang === 'ta' ? 'நாள் மாற்றம்' : 'Day Change';
+      document.getElementById("statSubToday").innerHTML = `${dodPrefix}: <strong class="${dodChange >= 0 ? 'text-success' : 'text-danger'}">${dodChange >= 0 ? '+' : ''}${dodChange.toFixed(1)}%</strong>`;
+
+      // 14-day average
+      const prices = historyData.map(h => h.modal_price || 0);
+      const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+      document.getElementById("statValAvg").innerText = `${currSymbol}${Math.round(avg).toLocaleString()}`;
+
+      // Forecast next 7 days average
+      const fcList = (forecastData && forecastData.forecast) ? forecastData.forecast : (Array.isArray(forecastData) ? forecastData : []);
+      if (fcList.length > 0) {
+        const fcVals = fcList.map(f => f.projected_price || f.forecast_modal_price || 0);
+        const fcAvg = fcVals.reduce((a, b) => a + b, 0) / fcVals.length;
+        const diff = fcAvg - todayPrice;
+        document.getElementById("statValForecast").innerText = `${currSymbol}${Math.round(fcAvg).toLocaleString()}`;
+        document.getElementById("statSubForecast").innerHTML = diff >= 0 
+          ? `<span class="text-success fw-bold">📈 +${currSymbol}${Math.round(diff)} ${currentLang === 'ta' ? 'உயரும் வாய்ப்பு' : 'Expected Rise'}</span>` 
+          : `<span class="text-danger fw-bold">📉 -${currSymbol}${Math.abs(Math.round(diff))} ${currentLang === 'ta' ? 'குறையலாம்' : 'Expected Drop'}</span>`;
+      }
+
+      // Volatility
+      const maxP = Math.max(...prices);
+      const minP = Math.min(...prices);
+      const spreadPct = ((maxP - minP) / avg) * 100;
+      let volText = currentLang === 'ta' ? "மிதமானது" : "Moderate";
+      if (spreadPct > 15) volText = currentLang === 'ta' ? "அதிக அசைவு" : "High Volatility";
+      else if (spreadPct < 8) volText = currentLang === 'ta' ? "மிகவும் நிலையானது" : "Very Stable";
+      document.getElementById("statValVolatility").innerText = volText;
+    }
+
+    function renderChart(historyData, forecastData) {
+      const ctx = document.getElementById("analyticsChart");
+      if (!ctx) return;
+
+      const last14 = historyData.slice(-14);
+      const histLabels = last14.map(d => {
+        const dt = new Date(d.date);
+        return `${dt.getDate()}/${dt.getMonth()+1}`;
+      });
+
+      const actualPrices = last14.map(d => d.modal_price);
+      const trendPrices = last14.map(d => d.trend ? Math.round(d.trend) : d.modal_price);
+
+      const fcList = (forecastData && forecastData.forecast) ? forecastData.forecast : (Array.isArray(forecastData) ? forecastData : []);
+      const fcLabels = fcList.map(f => {
+        const dt = new Date(f.date);
+        return `${dt.getDate()}/${dt.getMonth()+1}`;
+      });
+
+      const combinedLabels = [...histLabels, ...fcLabels];
+
+      // Connect actual to forecast
+      const fcLine = new Array(last14.length - 1).fill(null);
+      if (last14.length > 0) fcLine.push(last14[last14.length - 1].modal_price);
+      fcList.forEach(f => fcLine.push(f.projected_price || f.forecast_modal_price || 0));
+
+      const actualLine = [...actualPrices, ...new Array(fcList.length).fill(null)];
+      const trendLine = [...trendPrices, ...new Array(fcList.length).fill(null)];
+
+      if (analyticsChartInstance) analyticsChartInstance.destroy();
+
+      const unitText = currentLang === 'ta' ? 'குவிண்டால்' : 'Quintal';
+      const currSymbol = currentLang === 'ta' ? 'ரூ ' : '₹';
+
+      analyticsChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: combinedLabels,
+          datasets: [
+            {
+              label: currentLang === 'ta' ? 'உண்மையான சந்தை விலை' : 'Actual Market Price',
+              data: actualLine,
+              borderColor: '#2e7d32',
+              backgroundColor: 'rgba(46, 125, 50, 0.1)',
+              borderWidth: 3,
+              pointRadius: 5,
+              pointBackgroundColor: '#2e7d32',
+              fill: false,
+              tension: 0.25
+            },
+            {
+              label: currentLang === 'ta' ? 'அடிப்படை போக்கு' : 'Underlying Trend',
+              data: trendLine,
+              borderColor: '#1976d2',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              pointRadius: 0,
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: currentLang === 'ta' ? '7 நாள் மாதிரி கணிப்பு' : '7-Day Model Forecast',
+              data: fcLine,
+              borderColor: '#f57c00',
+              backgroundColor: 'rgba(245, 124, 0, 0.08)',
+              borderWidth: 3,
+              borderDash: [6, 6],
+              pointRadius: 5,
+              pointBackgroundColor: '#f57c00',
+              fill: true,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return ` ${currSymbol}${ctx.parsed.y ? ctx.parsed.y.toLocaleString() : '-'}/${unitText}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: val => currSymbol + val.toLocaleString()
+              },
+              grid: { color: '#f0f4f0' }
+            },
+            x: {
+              grid: { color: '#f0f4f0' }
+            }
+          }
+        }
+      });
+    }
+
+    function renderPastHistoryTable(historyData) {
+      const tbody = document.getElementById("pastHistoryTableBody");
+      if (!tbody) return;
+      const last7 = historyData.slice(-7).reverse();
+      const currSymbol = currentLang === 'ta' ? 'ரூ ' : '₹';
+
+      tbody.innerHTML = last7.map(d => {
+        const dt = new Date(d.date);
+        const dayName = currentLang === 'ta' ? DAYS_TA[dt.getDay()] : DAYS_SHORT_EN[dt.getDay()];
+        const dod = d.pct_change_dod || 0;
+        const minP = d.min_price || Math.round(d.modal_price * 0.95);
+        const maxP = d.max_price || Math.round(d.modal_price * 1.05);
+
+        return `
+          <tr>
+            <td class="text-nowrap">
+              <strong>${d.date}</strong><br>
+              <span class="text-muted small">(${dayName})</span>
+            </td>
+            <td class="fw-bold text-success fs-6">${currSymbol}${Math.round(d.modal_price).toLocaleString()}</td>
+            <td class="text-secondary small">${currSymbol}${minP.toLocaleString()} - ${currSymbol}${maxP.toLocaleString()}</td>
+            <td>
+              <span class="badge ${dod >= 0 ? 'bg-success' : 'bg-danger'}">
+                ${dod >= 0 ? '+' : ''}${dod.toFixed(1)}%
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderFutureForecastTable(forecastData, historyData) {
+      const tbody = document.getElementById("futureForecastTableBody");
+      if (!tbody) return;
+
+      const list = (forecastData && forecastData.forecast) ? forecastData.forecast : (Array.isArray(forecastData) ? forecastData : []);
+      const latestPrice = (historyData && historyData.length > 0) ? historyData[historyData.length - 1].modal_price : 0;
+      const currSymbol = currentLang === 'ta' ? 'ரூ ' : '₹';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-3 text-muted">${currentLang === 'ta' ? 'கணிப்பு தரவு கிடைக்கவில்லை.' : 'No forecast data available.'}</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(f => {
+        const dt = new Date(f.date);
+        const dayIdx = dt.getDay();
+        const dayName = currentLang === 'ta' ? (f.day_name_ta || DAYS_TA[dayIdx]) : (f.day_name_en || DAYS_EN[dayIdx]);
+        const p = f.projected_price || f.forecast_modal_price || 0;
+        const diff = p - latestPrice;
+        const pct = Math.abs(latestPrice > 0 ? ((diff / latestPrice) * 100).toFixed(1) : 0);
+        
+        let directionText = "";
+        if (currentLang === 'ta') {
+          directionText = f.label_ta || (diff >= 0 ? "உயரும்" : "குறையும்");
+        } else {
+          directionText = f.label_en || (diff >= 0 ? "Rising" : "Falling");
+        }
+
+        const trendBadge = diff >= 0 
+          ? `<span class="badge bg-success-subtle text-success fw-bold">↗️ +${currSymbol}${Math.round(diff)} (${pct}%) ${directionText}</span>` 
+          : `<span class="badge bg-danger-subtle text-danger fw-bold">↘️ -${currSymbol}${Math.abs(Math.round(diff))} (${pct}%) ${directionText}</span>`;
+
+        return `
+          <tr>
+            <td class="text-nowrap fw-semibold">${f.date}</td>
+            <td class="text-secondary fw-bold">${dayName}</td>
+            <td class="fw-bold text-dark fs-6">${currSymbol}${Math.round(p).toLocaleString()}</td>
+            <td>${trendBadge}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ta' ? 'en' : 'ta';
+      localStorage.setItem("tn_mandi_lang", currentLang);
+      updateLanguageUI();
+      renderCropPills();
+      document.getElementById("mandiSearchInput").value = getMandiDisplayName(currentMarket);
+      loadAnalyticsData();
+      checkAuthSession();
+    }
+
+    function updateLanguageUI() {
+      document.getElementById("btnLangToggle").innerText = currentLang === 'ta' ? 'English' : 'தமிழ்';
+      document.querySelectorAll(".nav-text").forEach(el => {
+        el.innerText = el.getAttribute(`data-${currentLang}`) || el.innerText;
+      });
+
+      if (currentLang === 'ta') {
+        document.getElementById("pageTitle").innerText = "விலை ஆய்வு & 7 நாள் கணிப்பு | Fair Mandi";
+        document.getElementById("navLogoText").innerText = "Fair Mandi";
+        document.getElementById("navLiveFeedBadge").innerText = "24/7 சந்தை நேரலை";
+        document.getElementById("lblSelectMandi").innerText = "📍 சந்தையைத் தேர்ந்தெடுக்கவும்:";
+        document.getElementById("mandiSearchInput").placeholder = "சந்தை பெயரை தட்டச்சு செய்க...";
+        document.getElementById("lblSelectCrop").innerText = "🌾 பயிரைத் தேர்ந்தெடுக்கவும்:";
+        document.getElementById("statLblToday").innerText = "இன்றைய சந்தை விலை";
+        document.getElementById("statLblAvg").innerText = "14 நாட்கள் சராசரி விலை";
+        document.getElementById("statSubAvg").innerText = "அடிப்படை சராசரி";
+        document.getElementById("statLblForecast").innerText = "7 நாள் மாதிரி கணிப்பு";
+        document.getElementById("statSubForecast").innerText = "எதிர்பார்க்கப்படும் போக்கு";
+        document.getElementById("statLblVolatility").innerText = "சந்தை விலை நிலைத்தன்மை";
+        document.getElementById("statSubVolatility").innerText = "பருவகால சுழற்சி";
+        document.getElementById("chartCardHeading").innerText = "14 நாட்கள் உண்மையான விலை மற்றும் 7 நாட்கள் மாதிரி கணிப்பு வரைபடம்";
+        document.getElementById("chartCardSub").innerText = "கடந்த கால அசைவு மற்றும் அடுத்த வார விலைப் போக்கு";
+        document.getElementById("legendActual").innerText = "உண்மையான சந்தை விலை";
+        document.getElementById("legendTrend").innerText = "அடிப்படை போக்கு";
+        document.getElementById("legendForecast").innerText = "7 நாள் மாதிரி கணிப்பு";
+        document.getElementById("histTableTitle").innerText = "📅 கடந்த 7 நாட்கள் நாள் வாரியாக விலை மாற்றம்";
+        document.getElementById("badgeHistPill").innerText = "வரலாறு";
+        document.getElementById("thHistDate").innerText = "தேதி";
+        document.getElementById("thHistPrice").innerText = "சந்தை விலை (ரூ/குவி)";
+        document.getElementById("thHistRange").innerText = "குறைந்தபட்சம் - அதிகபட்சம்";
+        document.getElementById("thHistChange").innerText = "நாள் மாற்றம்";
+        document.getElementById("footerNoteHist").innerText = "* விலை ஒரு குவிண்டாலுக்கு (100 கிலோ)";
+        document.getElementById("forecastTableTitle").innerText = "🔮 அடுத்த 7 நாட்கள் விலை கணிப்பு விவரங்கள்";
+        document.getElementById("badgeFcPill").innerText = "AI கணிப்பு";
+        document.getElementById("thFcDate").innerText = "தேதி";
+        document.getElementById("thFcDay").innerText = "கிழமை";
+        document.getElementById("thFcPrice").innerText = "கணிக்கப்பட்ட விலை (ரூ/குவி)";
+        document.getElementById("thFcTrend").innerText = "எதிர்பார்க்கப்படும் போக்கு";
+        document.getElementById("footerNoteFc").innerText = "* முந்தைய 14 நாட்கள் சந்தை சுழற்சி அடிப்படையில் கணிக்கப்பட்டது";
+        document.getElementById("footerBrandNote").innerText = "Fair Mandi — விலை ஆய்வு & 7 நாள் கணிப்பு முறைமை | 2026";
+      } else {
+        document.getElementById("pageTitle").innerText = "Price Analytics & 7-Day Forecast | Fair Mandi";
+        document.getElementById("navLogoText").innerText = "Fair Mandi";
+        document.getElementById("navLiveFeedBadge").innerText = "24/7 Live Mandi Feeds";
+        document.getElementById("lblSelectMandi").innerText = "📍 Select Mandi:";
+        document.getElementById("mandiSearchInput").placeholder = "Type mandi name...";
+        document.getElementById("lblSelectCrop").innerText = "🌾 Select Commodity:";
+        document.getElementById("statLblToday").innerText = "Today's Modal Price";
+        document.getElementById("statLblAvg").innerText = "14-Day Average Price";
+        document.getElementById("statSubAvg").innerText = "Baseline Average";
+        document.getElementById("statLblForecast").innerText = "7-Day Model Forecast";
+        document.getElementById("statSubForecast").innerText = "Projected Direction";
+        document.getElementById("statLblVolatility").innerText = "Price Volatility Index";
+        document.getElementById("statSubVolatility").innerText = "Seasonal Volatility";
+        document.getElementById("chartCardHeading").innerText = "14-Day Actual Price Trend & 7-Day Model Forecast";
+        document.getElementById("chartCardSub").innerText = "Historical movements & forward projected trajectory";
+        document.getElementById("legendActual").innerText = "Actual Market Price";
+        document.getElementById("legendTrend").innerText = "Underlying Trend";
+        document.getElementById("legendForecast").innerText = "7-Day Model Forecast";
+        document.getElementById("histTableTitle").innerText = "📅 Past 7 Days Historical Day-by-Day Movements";
+        document.getElementById("badgeHistPill").innerText = "History";
+        document.getElementById("thHistDate").innerText = "Date";
+        document.getElementById("thHistPrice").innerText = "Modal Price (₹/Q)";
+        document.getElementById("thHistRange").innerText = "Range (Min - Max)";
+        document.getElementById("thHistChange").innerText = "Day Change";
+        document.getElementById("footerNoteHist").innerText = "* Price per Quintal (100 kg)";
+        document.getElementById("forecastTableTitle").innerText = "🔮 Next 7 Days Forward Projected Trajectory";
+        document.getElementById("badgeFcPill").innerText = "AI Forecast";
+        document.getElementById("thFcDate").innerText = "Date";
+        document.getElementById("thFcDay").innerText = "Day";
+        document.getElementById("thFcPrice").innerText = "Projected Price (₹/Q)";
+        document.getElementById("thFcTrend").innerText = "Expected Trend";
+        document.getElementById("footerNoteFc").innerText = "* Projected based on past 14 days cyclical movements";
+        document.getElementById("footerBrandNote").innerText = "Fair Mandi — Price Analytics & 7-Day Forecasting System | 2026";
+      }
+    }
+  </script>
+</body>
+</html>

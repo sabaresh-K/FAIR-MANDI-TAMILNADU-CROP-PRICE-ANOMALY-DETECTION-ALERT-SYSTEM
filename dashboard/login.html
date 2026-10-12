@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">விவசாயி உள்நுழைவு & பதிவு | Fair Mandi</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts: Inter & Noto Sans Tamil -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-green: #1b5e20;
+      --secondary-green: #2e7d32;
+      --light-green: #e8f5e9;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --font-family: 'Inter', 'Noto Sans Tamil', -apple-system, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: linear-gradient(135deg, #f4fbf5 0%, #e8f5e9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #212529;
+    }
+
+    /* Navbar */
+    .portal-nav {
+      background: linear-gradient(90deg, #1b5e20, #2e7d32);
+      padding: 14px 24px;
+      color: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    .portal-brand:hover {
+      color: #e0f2f1;
+    }
+
+    /* Auth Container */
+    .auth-container {
+      max-width: 580px;
+      margin: 36px auto;
+      padding: 0 16px;
+      flex: 1;
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid rgba(46, 125, 50, 0.15);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    /* Header in Card */
+    .card-banner {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: white;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+    }
+    .card-banner h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card-banner p {
+      font-size: 0.88rem;
+      opacity: 0.9;
+      margin-bottom: 0;
+    }
+
+    /* Database status bar */
+    .db-status-bar {
+      background: #f1f8e9;
+      border: 1px solid #c8e6c9;
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin: 16px 24px 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Auth Tabs */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid #e0e0e0;
+      background: #fafafa;
+      margin-top: 14px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      background: transparent;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #616161;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .auth-tab-btn.active {
+      color: var(--primary-green);
+      background: white;
+      border-bottom-color: var(--primary-green);
+    }
+
+    .card-body-content {
+      padding: 28px;
+    }
+
+    /* Form Fields */
+    .form-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #37474f;
+      margin-bottom: 6px;
+    }
+    .input-group-text {
+      background-color: #f1f8e9;
+      border-color: #c8e6c9;
+      color: #2e7d32;
+      font-weight: 700;
+    }
+    .form-control, .form-select {
+      border: 1.5px solid #cfd8dc;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--secondary-green);
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+    }
+
+    /* Crop Selection Pills */
+    .crop-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .crop-pill-label {
+      background: #f5f5f5;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .crop-pill-checkbox {
+      display: none;
+    }
+    .crop-pill-checkbox:checked + .crop-pill-label {
+      background: #e8f5e9;
+      border-color: #2e7d32;
+      color: #1b5e20;
+      box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+    }
+
+    /* Notification Channel Radios */
+    .channel-radios {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .channel-box {
+      flex: 1;
+      position: relative;
+    }
+    .channel-box input {
+      display: none;
+    }
+    .channel-label {
+      display: block;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #fafafa;
+      transition: all 0.15s;
+    }
+    .channel-box input:checked + .channel-label {
+      background: #e8f5e9;
+      border-color: #2e7d32;
+      color: #1b5e20;
+    }
+
+    /* Submit Button */
+    .btn-auth-submit {
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      width: 100%;
+      box-shadow: 0 4px 14px rgba(27, 94, 32, 0.3);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-auth-submit:hover {
+      background: linear-gradient(135deg, #154d19, #256629);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(27, 94, 32, 0.4);
+    }
+
+    /* Already Logged In Card */
+    .user-profile-badge {
+      background: #e8f5e9;
+      border: 2px solid #81c784;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .portal-footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 0.85rem;
+      color: #616161;
+      border-top: 1px solid #e0e0e0;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="portal-nav d-flex align-items-center justify-content-between">
+    <a href="/dashboard/index.html" class="portal-brand">
+      <span class="fs-3">🌾</span>
+      <span id="navLogo">Fair Mandi</span>
+    </a>
+    <div class="d-flex align-items-center gap-2">
+      <a href="/dashboard/index.html" class="btn btn-outline-light btn-sm rounded-pill px-3 fw-bold">
+        📊 <span id="navBackText">முகப்பு சந்தை</span>
+      </a>
+      <button class="btn btn-light btn-sm rounded-pill px-3 fw-bold text-success shadow-sm" onclick="toggleLanguage()" id="langBtn">
+        English
+      </button>
+    </div>
+  </nav>
+
+  <!-- Auth Main Container -->
+  <div class="auth-container">
+    <div class="auth-card">
+      
+      <!-- Card Top Banner -->
+      <div class="card-banner">
+        <div class="fs-1 mb-1">🌱</div>
+        <h2 id="bannerTitle">விவசாயிகள் உள்நுழைவு & பதிவு</h2>
+        <p id="bannerSub">உங்கள் சந்தை விலைகள், நுண்ணறிவு & தானியங்கி அறிவிப்புகளைப் பெறுங்கள்</p>
+      </div>
+
+      <!-- Live Database Connectivity Status -->
+      <div class="db-status-bar">
+        <div class="d-flex align-items-center gap-2">
+          <span class="spinner-grow spinner-grow-sm text-success" style="width: 0.55rem; height: 0.55rem;"></span>
+          <span class="small fw-bold text-success" id="dbStatusBadge">🟢 நேரடி SQLite தரவுத்தளம் இணைக்கப்பட்டுள்ளது</span>
+        </div>
+        <span class="badge bg-success text-white rounded-pill px-2 py-1 small fw-bold" id="dbUsersCount">
+          பதிவு செய்த விவசாயிகள்: ...
+        </span>
+      </div>
+
+      <!-- Logged-in State Card (Shown if active session detected) -->
+      <div id="alreadyLoggedInBox" class="p-4 d-none">
+        <div class="user-profile-badge">
+          <div class="fs-2 mb-2">🧑‍🌾</div>
+          <h4 class="fw-bold text-success" id="loggedFarmerName">வணக்கம்!</h4>
+          <p class="text-secondary small mb-3" id="loggedFarmerDetails">நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.</p>
+          <div class="d-flex gap-2 justify-content-center flex-wrap">
+            <button class="btn btn-success rounded-pill px-4 fw-bold" onclick="goToDashboard()">
+              🚀 <span id="btnContinueDash">நேரடி சந்தைக்குச் செல்</span>
+            </button>
+            <button class="btn btn-outline-danger rounded-pill px-4 fw-bold" onclick="handleLogout()">
+              🚪 <span id="btnLogoutText">வெளியேறு</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Form Container -->
+      <div id="authFormsContainer">
+        
+        <!-- Tab Selector: Login vs Register -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tabLoginBtn" onclick="switchTab('login')">
+            🔑 <span id="tabLoginText">உள்நுழைக</span>
+          </button>
+          <button class="auth-tab-btn" id="tabRegisterBtn" onclick="switchTab('register')">
+            📝 <span id="tabRegisterText">புதிய பதிவு</span>
+          </button>
+        </div>
+
+        <div class="card-body-content">
+          
+          <!-- Alert Feedback Message Box -->
+          <div id="authAlert" class="alert d-none py-2 px-3 mb-3 rounded-3 small fw-bold"></div>
+
+          <!-- 1. LOGIN FORM (Reads directly from SQLite database) -->
+          <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+            
+            <!-- Mobile Number -->
+            <div class="mb-3">
+              <label class="form-label" id="lblLoginPhone">பதிவு செய்த கைபேசி எண்:</label>
+              <div class="input-group">
+                <span class="input-group-text">+91</span>
+                <input type="tel" id="loginPhone" class="form-control" placeholder="10 இலக்க மொபைல் எண் (எ.கா. 9443123456)" maxlength="10" required autofocus>
+              </div>
+            </div>
+
+            <!-- Password / PIN -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label mb-0" id="lblLoginPwd">கடவுச்சொல் அல்லது பின் எண்:</label>
+              </div>
+              <div class="input-group">
+                <input type="password" id="loginPassword" class="form-control" placeholder="உங்கள் கடவுச்சொல்" required>
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('loginPassword', this)">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+              <label class="form-check-label text-secondary small" for="rememberMe" id="lblRemember">
+                இந்த சாதனத்தில் என்னை நினைவில் வைக்கவும்
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-auth-submit" id="btnLoginSubmit">
+              <span>🚀</span>
+              <span id="btnSubmitLoginText">உள்நுழைக</span>
+            </button>
+            
+            <div class="text-center mt-3">
+              <span class="text-secondary small" id="lblNoAccount">புதிய விவசாயியா?</span>
+              <a href="#" class="small fw-bold text-success text-decoration-none ms-1" onclick="switchTab('register'); return false;" id="linkGoRegister">
+                இங்கு பதிவு செய்க
+              </a>
+            </div>
+          </form>
+
+          <!-- 2. REGISTRATION FORM (Writes directly to SQLite database) -->
+          <form id="registerForm" class="d-none" onsubmit="handleRegisterSubmit(event)">
+            
+            <!-- Full Name -->
+            <div class="mb-3">
+              <label class="form-label" id="lblRegName">விவசாயி பெயர்:</label>
+              <input type="text" id="regName" class="form-control" placeholder="உங்கள் முழு பெயர் (எ.கா. க. ராமநாதன்)" required>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="mb-3">
+              <label class="form-label" id="lblRegPhone">கைபேசி எண்:</label>
+              <div class="input-group">
+                <span class="input-group-text">+91</span>
+                <input type="tel" id="regPhone" class="form-control" placeholder="10 இலக்க மொபைல் எண்" maxlength="10" required>
+              </div>
+            </div>
+
+            <!-- Password / PIN -->
+            <div class="mb-3">
+              <label class="form-label" id="lblRegPwd">கடவுச்சொல் அல்லது பின் எண் அமைக்கவும்:</label>
+              <div class="input-group">
+                <input type="password" id="regPassword" class="form-control" placeholder="குறைந்தது 4 எழுத்துக்கள் அல்லது எண்கள்" minlength="4" required>
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('regPassword', this)">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <!-- District & Mandi Selectors -->
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <label class="form-label" id="lblRegDistrict">மாவட்டம்:</label>
+                <select id="regDistrict" class="form-select" onchange="filterMandisByDistrict(this.value)" required>
+                  <!-- Populated dynamically based on language -->
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" id="lblRegMandi">முதன்மை சந்தை:</label>
+                <select id="regMandi" class="form-select" required>
+                  <!-- Populated dynamically via JS from 177 mandis -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Monitored Crops (Selectable Pills) -->
+            <div class="mb-3">
+              <label class="form-label d-flex justify-content-between align-items-center">
+                <span id="lblRegCrops">கண்காணிக்க விரும்பும் பயிர்கள்:</span>
+                <span class="text-secondary small" id="lblPickCropsNote">(குறைந்தது 1 பயிர் தேர்வு செய்க)</span>
+              </label>
+              
+              <div class="crop-pills-grid" id="cropPillsContainer">
+                <!-- Dynamically generated crop pills -->
+              </div>
+            </div>
+
+            <!-- Dedicated 1-Click Mobile SMS Price Alert Feature Info -->
+            <div class="mb-4 p-3 bg-light border border-success-subtle rounded-3 d-flex align-items-center gap-3">
+              <span class="fs-3">📲</span>
+              <div>
+                <strong class="text-success small d-block" id="lblRegChannelTitle">1-கிளிக் கைபேசி SMS எச்சரிக்கை சேவை</strong>
+                <span class="text-secondary small" id="lblRegChannelDesc">நீங்கள் உள்நுழையும் போது வழங்கும் இந்த மொபைல் எண்ணிற்கு முக்கிய விலை மாற்றங்கள் மற்றும் விற்பனை முடிவுகள் 1-கிளிக் SMS மூலம் உடனுக்குடன் வழங்கப்படும்.</span>
+              </div>
+            </div>
+
+            <!-- Register Button -->
+            <button type="submit" class="btn-auth-submit" id="btnRegisterSubmit">
+              <span>✅</span>
+              <span id="btnSubmitRegText">பதிவு செய்து தொடர்க</span>
+            </button>
+
+            <div class="text-center mt-3">
+              <span class="text-secondary small" id="lblHaveAccount">ஏற்கனவே கணக்கு உள்ளதா?</span>
+              <a href="#" class="small fw-bold text-success text-decoration-none ms-1" onclick="switchTab('login'); return false;" id="linkGoLogin">
+                உள்நுழைக
+              </a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="portal-footer">
+    <div class="container text-center">
+      <span id="footerText">🌾 தமிழ்நாடு உழவர் சந்தை விலை கண்காணிப்பு & நுண்ணறிவு தளம் | 2026</span>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Language State synced with localStorage
+    let currentLang = localStorage.getItem("tn_mandi_lang") || "ta";
+
+    const DISTRICTS = [
+      { id: "Madurai", ta: "மதுரை", en: "Madurai" },
+      { id: "Sivaganga", ta: "சிவகங்கை", en: "Sivaganga" },
+      { id: "Dindigul", ta: "திண்டுக்கல்", en: "Dindigul" },
+      { id: "Coimbatore", ta: "கோயம்புத்தூர்", en: "Coimbatore" },
+      { id: "Salem", ta: "சேலம்", en: "Salem" },
+      { id: "Tiruchirappalli", ta: "திருச்சிராப்பள்ளி", en: "Tiruchirappalli" },
+      { id: "Thanjavur", ta: "தஞ்சாவூர்", en: "Thanjavur" },
+      { id: "Theni", ta: "தேனி", en: "Theni" },
+      { id: "Erode", ta: "ஈரோடு", en: "Erode" },
+      { id: "Tirunelveli", ta: "திருநெல்வேலி", en: "Tirunelveli" },
+      { id: "Dharmapuri", ta: "தர்மபுரி", en: "Dharmapuri" },
+      { id: "Krishnagiri", ta: "கிருஷ்ணகிரி", en: "Krishnagiri" },
+      { id: "Villupuram", ta: "விழுப்புரம்", en: "Villupuram" },
+      { id: "Vellore", ta: "வேலூர்", en: "Vellore" },
+      { id: "Chennai", ta: "சென்னை", en: "Chennai" }
+    ];
+
+    const MANDIS_TA = {
+      "Madurai": "மதுரை", "Melur": "மேலூர்", "Vadipatti": "வாடிப்பட்டி", "Tirumangalam": "திருமங்கலம்",
+      "Usilampatti": "உசிலம்பட்டி", "Coimbatore": "கோயம்புத்தூர்", "Pollachi": "பொள்ளாச்சி",
+      "Annur": "அன்னூர்", "Mettupalayam": "மேட்டுப்பாளையம்", "Salem": "சேலம்", "Attur": "ஆத்தூர்",
+      "Sankari": "சங்ககிரி", "Edappadi": "எடப்பாடி", "Erode": "ஈரோடு", "Gobichettipalayam": "கோபிசெட்டிபாளையம்",
+      "Bhavani": "பவானி", "Kodumudi": "கொடுமுடி", "Perundurai": "பெருந்துறை", "Sathyamangalam": "சத்தியமங்கலம்",
+      "Dindigul": "திண்டுக்கல்", "Palani": "பழனி", "Oddanchatram": "ஒட்டன்சத்திரம்", "Natham": "நத்தம்",
+      "Kodaikanal": "கொடைக்கானல்", "Thanjavur": "தஞ்சாவூர்", "Kumbakonam": "கும்பகோணம்",
+      "Pattukkottai": "பட்டுக்கோட்டை", "Tiruchirappalli": "திருச்சிராப்பள்ளி", "Manapparai": "மணப்பாறை",
+      "Thuraiyur": "துறையூர்", "Tirunelveli": "திருநெல்வேலி", "Ambasamudram": "அம்பாசமுத்திரம்",
+      "Tenkasi": "தென்காசி", "Sankarankovil": "சங்கரன்கோவில்", "Theni": "தேனி", "Periyakulam": "பெரியகுளம்",
+      "Bodinayakanur": "போடிநாயக்கனூர்", "Cumbum": "கம்பம்", "Dharmapuri": "தர்மபுரி", "Harur": "அரூர்",
+      "Palacode": "பாலக்கோடு", "Pennagaram": "பெண்ணாகரம்", "Krishnagiri": "கிருஷ்ணகிரி", "Hosur": "ஓசூர்",
+      "Pochampalli": "போச்சம்பள்ளி", "Denkanikottai": "தேன்கனிக்கோட்டை", "Villupuram": "விழுப்புரம்",
+      "Tindivanam": "திண்டிவனம்", "Kallakurichi": "கள்ளக்குறிச்சி", "Vellore": "வேலூர்",
+      "Gudiyatham": "குடியாத்தம்", "Ambur": "ஆம்பூர்", "Tirupathur": "திருப்பத்தூர்", "Vaniyambadi": "வாணியம்பாடி",
+      "Koyambedu": "கோயம்பேடு", "Thiruvanmiyur": "திருவான்மியூர்"
+    };
+
+    const DISTRICTS_TA = {
+      "Ariyalur": "அரியலூர்", "Chengalpattu": "செங்கல்பட்டு", "Chennai": "சென்னை",
+      "Coimbatore": "கோயம்புத்தூர்", "Cuddalore": "கடலூர்", "Dharmapuri": "தர்மபுரி",
+      "Dindigul": "திண்டுக்கல்", "Erode": "ஈரோடு", "Kallakurichi": "கள்ளக்குறிச்சி",
+      "Kanchipuram": "காஞ்சிபுரம்", "Kanyakumari": "கன்னியாகுமரி", "Karur": "கரூர்",
+      "Krishnagiri": "கிருஷ்ணகிரி", "Madurai": "மதுரை", "Mayiladuthurai": "மயிலாடுதுறை",
+      "Nagapattinam": "நாகப்பட்டினம்", "Namakkal": "நாமக்கல்", "Nilgiris": "நீலகிரி",
+      "Perambalur": "பெரம்பலூர்", "Pudukkottai": "புதுக்கோட்டை", "Ramanathapuram": "ராமநாதபுரம்",
+      "Ranipet": "ராணிப்பேட்டை", "Salem": "சேலம்", "Sivaganga": "சிவகங்கை",
+      "Tenkasi": "தென்காசி", "Thanjavur": "தஞ்சாவூர்", "Theni": "தேனி",
+      "Thoothukudi": "தூத்துக்குடி", "Tiruchirappalli": "திருச்சிராப்பள்ளி",
+      "Tirunelveli": "திருநெல்வேலி", "Tirupathur": "திருப்பத்தூர்", "Tiruppur": "திருப்பூர்",
+      "Tiruvallur": "திருவள்ளூர்", "Tiruvannamalai": "திருவண்ணாமலை", "Tiruvarur": "திருவாரூர்",
+      "Vellore": "வேலூர்", "Viluppuram": "விழுப்புரம்", "Virudhunagar": "விருதுநகர்"
+    };
+
+    function getDistrictName(dist) {
+      if (!dist) return "";
+      if (currentLang === 'ta') {
+        const ta = DISTRICTS_TA[dist] || dist;
+        return ta.endsWith("மாவட்டம்") ? ta : `${ta} மாவட்டம்`;
+      }
+      return `${dist} District`;
+    }
+
+    function getMandiDisplayName(mandi) {
+      if (!mandi) return "";
+      if (currentLang === 'ta') {
+        return MANDIS_TA[mandi] || mandi;
+      }
+      return mandi;
+    }
+
+    const I18N = {
+      ta: {
+        pageTitle: "விவசாயி உள்நுழைவு & பதிவு | Fair Mandi",
+        navLogo: "Fair Mandi",
+        navBackText: "முகப்பு சந்தை",
+        langBtn: "English",
+        bannerTitle: "விவசாயிகள் உள்நுழைவு & பதிவு",
+        bannerSub: "உங்கள் சந்தை விலைகள், நுண்ணறிவு & தானியங்கி அறிவிப்புகளைப் பெறுங்கள்",
+        dbStatusBadge: "🟢 நேரடி SQLite தரவுத்தளம் இணைக்கப்பட்டுள்ளது",
+        tabLoginText: "உள்நுழைக",
+        tabRegisterText: "புதிய பதிவு",
+        lblLoginPhone: "பதிவு செய்த கைபேசி எண்:",
+        loginPhonePlaceholder: "10 இலக்க மொபைல் எண் (எ.கா. 9443123456)",
+        lblLoginPwd: "கடவுச்சொல் அல்லது பின் எண்:",
+        loginPwdPlaceholder: "உங்கள் கடவுச்சொல்",
+        lblRemember: "இந்த சாதனத்தில் என்னை நினைவில் வைக்கவும்",
+        btnSubmitLoginText: "உள்நுழைக",
+        lblNoAccount: "புதிய விவசாயியா?",
+        linkGoRegister: "இங்கு பதிவு செய்க",
+        lblRegName: "விவசாயி பெயர்:",
+        regNamePlaceholder: "உங்கள் முழு பெயர் (எ.கா. க. ராமநாதன்)",
+        lblRegPhone: "கைபேசி எண்:",
+        regPhonePlaceholder: "10 இலக்க மொபைல் எண்",
+        lblRegPwd: "கடவுச்சொல் அல்லது பின் எண் அமைக்கவும்:",
+        regPwdPlaceholder: "குறைந்தது 4 எழுத்துக்கள் அல்லது எண்கள்",
+        lblRegDistrict: "மாவட்டம்:",
+        lblRegMandi: "முதன்மை சந்தை:",
+        lblRegCrops: "கண்காணிக்க விரும்பும் பயிர்கள்:",
+        lblPickCropsNote: "(குறைந்தது 1 பயிர் தேர்வு செய்க)",
+        lblRegChannelTitle: "1-கிளிக் கைபேசி SMS எச்சரிக்கை சேவை",
+        lblRegChannelDesc: "நீங்கள் உள்நுழையும் போது வழங்கும் இந்த மொபைல் எண்ணிற்கு முக்கிய விலை மாற்றங்கள் மற்றும் விற்பனை முடிவுகள் 1-கிளிக் SMS மூலம் உடனுக்குடன் வழங்கப்படும்.",
+        btnSubmitRegText: "பதிவு செய்து தொடர்க",
+        lblHaveAccount: "ஏற்கனவே கணக்கு உள்ளதா?",
+        linkGoLogin: "உள்நுழைக",
+        footerText: "🌾 தமிழ்நாடு உழவர் சந்தை விலை கண்காணிப்பு & நுண்ணறிவு தளம் | 2026",
+        btnContinueDash: "நேரடி சந்தைக்குச் செல்",
+        btnLogoutText: "வெளியேறு",
+        loginSuccess: "🎉 உள்நுழைவு வெற்றிகரமானது! முகப்பிற்கு அழைத்துச் செல்கிறோம்...",
+        regSuccess: "🎉 பதிவு வெற்றிகரமானது! உங்கள் விவரங்கள் தரவுத்தளத்தில் சேமிக்கப்பட்டன...",
+      },
+      en: {
+        pageTitle: "Farmer Login & Registration | Fair Mandi",
+        navLogo: "Fair Mandi",
+        navBackText: "Live Dashboard",
+        langBtn: "தமிழ்",
+        bannerTitle: "Farmer Login & Registration",
+        bannerSub: "Access personalized mandi prices, AI decisions & automated price alerts",
+        dbStatusBadge: "🟢 Live SQLite Database Connected",
+        tabLoginText: "Login",
+        tabRegisterText: "New Registration",
+        lblLoginPhone: "Registered Mobile Number:",
+        loginPhonePlaceholder: "10-digit mobile number (e.g. 9443123456)",
+        lblLoginPwd: "Password / PIN:",
+        loginPwdPlaceholder: "Enter your password",
+        lblRemember: "Remember me on this device",
+        btnSubmitLoginText: "Login to Portal",
+        lblNoAccount: "New Farmer?",
+        linkGoRegister: "Register Here",
+        lblRegName: "Farmer Full Name:",
+        regNamePlaceholder: "Your full name (e.g. K. Ramanathan)",
+        lblRegPhone: "Mobile Number:",
+        regPhonePlaceholder: "10-digit mobile number",
+        lblRegPwd: "Set Password / PIN:",
+        regPwdPlaceholder: "At least 4 characters or digits",
+        lblRegDistrict: "District:",
+        lblRegMandi: "Preferred Primary Mandi:",
+        lblRegCrops: "Crops to Monitor:",
+        lblPickCropsNote: "(Choose at least 1 crop)",
+        lblRegChannelTitle: "1-Click Mobile SMS Price Alerts",
+        lblRegChannelDesc: "Your registered mobile number provided at login receives instant 1-click SMS alerts for price spikes and selling decisions.",
+        btnSubmitRegText: "Register & Continue",
+        lblHaveAccount: "Already have an account?",
+        linkGoLogin: "Login Here",
+        footerText: "🌾 Tamil Nadu Regulated Mandi Price Intelligence & Alert System | 2026",
+        btnContinueDash: "Continue to Dashboard",
+        btnLogoutText: "Logout",
+        loginSuccess: "🎉 Login successful! Redirecting to Mandi Portal...",
+        regSuccess: "🎉 Registration successful! Saved directly to database...",
+      }
+    };
+
+    const CROPS_LIST = [
+      { id: "Tomato", ta: "தக்காளி", en: "Tomato", icon: "🍅" },
+      { id: "Onion", ta: "வெங்காயம்", en: "Onion", icon: "🧅" },
+      { id: "Potato", ta: "உருளைக்கிழங்கு", en: "Potato", icon: "🥔" },
+      { id: "Brinjal", ta: "கத்திரிக்காய்", en: "Brinjal", icon: "🍆" },
+      { id: "Banana", ta: "வாழைப்பழம்", en: "Banana", icon: "🍌" },
+      { id: "Coconut", ta: "தேங்காய்", en: "Coconut", icon: "🥥" },
+      { id: "Drumstick", ta: "முருங்கைக்காய்", en: "Drumstick", icon: "🌿" },
+      { id: "Carrot", ta: "கேரட்", en: "Carrot", icon: "🥕" },
+      { id: "Cabbage", ta: "முட்டைக்கோஸ்", en: "Cabbage", icon: "🥬" },
+      { id: "Green Chilli", ta: "பச்சை மிளகாய்", en: "Green Chilli", icon: "🌶️" },
+    ];
+
+    let allMarketsDetailed = [];
+
+    // Initialize Page
+    document.addEventListener("DOMContentLoaded", async () => {
+      populateDistricts();
+      renderCropPills();
+      await fetchDatabaseStatus();
+      await fetchMarketsDetailed();
+      checkExistingSession();
+      applyTranslations();
+    });
+
+    function populateDistricts() {
+      const select = document.getElementById("regDistrict");
+      if (!select) return;
+      const prevVal = select.value || "Madurai";
+      select.innerHTML = DISTRICTS.map(d => `
+        <option value="${d.id}" ${d.id === prevVal ? 'selected' : ''}>
+          ${currentLang === 'ta' ? (d.ta + ' மாவட்டம்') : (d.en + ' District')}
+        </option>
+      `).join("");
+    }
+
+    async function fetchDatabaseStatus() {
+      try {
+        const res = await fetch("/api/auth/database-info");
+        if (res.ok) {
+          const data = await res.json();
+          const countBadge = document.getElementById("dbUsersCount");
+          if (countBadge) {
+            countBadge.innerText = currentLang === 'ta'
+              ? `பதிவு செய்த விவசாயிகள்: ${data.registered_users}`
+              : `Registered Farmers in DB: ${data.registered_users}`;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not fetch database stats:", e);
+      }
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ta' ? 'en' : 'ta';
+      localStorage.setItem("tn_mandi_lang", currentLang);
+      applyTranslations();
+      populateDistricts();
+      renderCropPills();
+      fetchDatabaseStatus();
+      filterMandisByDistrict(document.getElementById("regDistrict").value);
+    }
+
+    function applyTranslations() {
+      const t = I18N[currentLang];
+      document.getElementById("pageTitle").innerText = t.pageTitle;
+      document.getElementById("navLogo").innerText = t.navLogo;
+      document.getElementById("navBackText").innerText = t.navBackText;
+      document.getElementById("langBtn").innerText = t.langBtn;
+      document.getElementById("bannerTitle").innerText = t.bannerTitle;
+      document.getElementById("bannerSub").innerText = t.bannerSub;
+      document.getElementById("dbStatusBadge").innerText = t.dbStatusBadge;
+      document.getElementById("tabLoginText").innerText = t.tabLoginText;
+      document.getElementById("tabRegisterText").innerText = t.tabRegisterText;
+      document.getElementById("lblLoginPhone").innerText = t.lblLoginPhone;
+      document.getElementById("loginPhone").placeholder = t.loginPhonePlaceholder;
+      document.getElementById("lblLoginPwd").innerText = t.lblLoginPwd;
+      document.getElementById("loginPassword").placeholder = t.loginPwdPlaceholder;
+      document.getElementById("lblRemember").innerText = t.lblRemember;
+      document.getElementById("btnSubmitLoginText").innerText = t.btnSubmitLoginText;
+      document.getElementById("lblNoAccount").innerText = t.lblNoAccount;
+      document.getElementById("linkGoRegister").innerText = t.linkGoRegister;
+      document.getElementById("lblRegName").innerText = t.lblRegName;
+      document.getElementById("regName").placeholder = t.regNamePlaceholder;
+      document.getElementById("lblRegPhone").innerText = t.lblRegPhone;
+      document.getElementById("regPhone").placeholder = t.regPhonePlaceholder;
+      document.getElementById("lblRegPwd").innerText = t.lblRegPwd;
+      document.getElementById("regPassword").placeholder = t.regPwdPlaceholder;
+      document.getElementById("lblRegDistrict").innerText = t.lblRegDistrict;
+      document.getElementById("lblRegMandi").innerText = t.lblRegMandi;
+      document.getElementById("lblRegCrops").innerText = t.lblRegCrops;
+      document.getElementById("lblPickCropsNote").innerText = t.lblPickCropsNote;
+      document.getElementById("lblRegChannelTitle").innerText = t.lblRegChannelTitle;
+      document.getElementById("lblRegChannelDesc").innerText = t.lblRegChannelDesc;
+      document.getElementById("btnSubmitRegText").innerText = t.btnSubmitRegText;
+      document.getElementById("lblHaveAccount").innerText = t.lblHaveAccount;
+      document.getElementById("linkGoLogin").innerText = t.linkGoLogin;
+      document.getElementById("footerText").innerText = t.footerText;
+      document.getElementById("btnContinueDash").innerText = t.btnContinueDash;
+      document.getElementById("btnLogoutText").innerText = t.btnLogoutText;
+    }
+
+    function renderCropPills() {
+      const container = document.getElementById("cropPillsContainer");
+      if (!container) return;
+
+      const selected = Array.from(document.querySelectorAll('.crop-pill-checkbox:checked')).map(c => c.value);
+      const isInitial = selected.length === 0;
+
+      container.innerHTML = CROPS_LIST.map(crop => {
+        const isChecked = isInitial ? (crop.id === 'Tomato') : selected.includes(crop.id);
+        const name = currentLang === 'ta' ? crop.ta : crop.en;
+        return `
+          <div>
+            <input type="checkbox" id="crop_${crop.id}" value="${crop.id}" class="crop-pill-checkbox" ${isChecked ? 'checked' : ''}>
+            <label for="crop_${crop.id}" class="crop-pill-label">
+              <span class="fs-5">${crop.icon}</span>
+              <span>${name}</span>
+            </label>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function fetchMarketsDetailed() {
+      try {
+        const res = await fetch("/markets-detailed");
+        if (res.ok) {
+          allMarketsDetailed = await res.json();
+          filterMandisByDistrict(document.getElementById("regDistrict").value);
+        }
+      } catch (e) {
+        console.warn("Could not load markets:", e);
+      }
+    }
+
+    function filterMandisByDistrict(selectedDistrict) {
+      const select = document.getElementById("regMandi");
+      if (!select) return;
+
+      const filtered = allMarketsDetailed.filter(m => 
+        (m.district && m.district.toLowerCase() === selectedDistrict.toLowerCase())
+      );
+
+      const listToUse = filtered.length > 0 ? filtered : allMarketsDetailed;
+      
+      select.innerHTML = listToUse.map(m => {
+        const mandiName = getMandiDisplayName(m.market);
+        const distName = getDistrictName(m.district || selectedDistrict);
+        return `<option value="${m.market}">${mandiName} (${distName})</option>`;
+      }).join('');
+    }
+
+    function switchTab(tab) {
+      const loginTab = document.getElementById("tabLoginBtn");
+      const regTab = document.getElementById("tabRegisterBtn");
+      const loginForm = document.getElementById("loginForm");
+      const regForm = document.getElementById("registerForm");
+      const alertBox = document.getElementById("authAlert");
+
+      alertBox.className = "alert d-none";
+
+      if (tab === 'login') {
+        loginTab.classList.add("active");
+        regTab.classList.remove("active");
+        loginForm.classList.remove("d-none");
+        regForm.classList.add("d-none");
+      } else {
+        regTab.classList.add("active");
+        loginTab.classList.remove("active");
+        regForm.classList.remove("d-none");
+        loginForm.classList.add("d-none");
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        btn.innerText = "🙈";
+      } else {
+        input.type = "password";
+        btn.innerText = "👁️";
+      }
+    }
+
+    function showAlert(msg, isSuccess = false) {
+      const alertBox = document.getElementById("authAlert");
+      alertBox.className = `alert ${isSuccess ? 'alert-success' : 'alert-danger'} py-2 px-3 mb-3 rounded-3 small fw-bold d-block`;
+      alertBox.innerText = msg;
+    }
+
+    async function checkExistingSession() {
+      const token = localStorage.getItem("tn_mandi_token");
+      if (!token) return;
+
+      try {
+        const res = await fetch(`/api/auth/me?token=${token}`);
+        if (res.ok) {
+          const data = await res.json();
+          const user = data.user;
+          if (user) {
+            document.getElementById("alreadyLoggedInBox").classList.remove("d-none");
+            document.getElementById("authFormsContainer").classList.add("d-none");
+            document.getElementById("loggedFarmerName").innerText = `${currentLang === 'ta' ? 'வணக்கம்' : 'Welcome'}, ${user.full_name}!`;
+            document.getElementById("loggedFarmerDetails").innerText = `📱 +91 ${user.phone} | 📍 ${getMandiDisplayName(user.preferred_mandi)}, ${getDistrictName(user.district)}`;
+          }
+        } else {
+          localStorage.removeItem("tn_mandi_token");
+          localStorage.removeItem("tn_mandi_user");
+        }
+      } catch (e) {
+        console.warn("Session check error:", e);
+      }
+    }
+
+    function goToDashboard() {
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get("redirect") || "/dashboard/index.html";
+      window.location.href = redirect;
+    }
+
+    async function handleLogout() {
+      const token = localStorage.getItem("tn_mandi_token");
+      if (token) {
+        try {
+          await fetch(`/api/auth/logout?token=${token}`, { method: 'POST' });
+        } catch (e) {}
+      }
+      localStorage.removeItem("tn_mandi_token");
+      localStorage.removeItem("tn_mandi_user");
+      document.getElementById("alreadyLoggedInBox").classList.add("d-none");
+      document.getElementById("authFormsContainer").classList.remove("d-none");
+      fetchDatabaseStatus();
+      showAlert(currentLang === 'ta' ? "வெற்றிகரமாக வெளியேற்றப்பட்டீர்கள்." : "Logged out successfully.", true);
+    }
+
+    // Login Form Submit (Direct DB Query)
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const phone = document.getElementById("loginPhone").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      
+      const btn = document.getElementById("btnLoginSubmit");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${currentLang === 'ta' ? 'தரவுத்தளத்தில் சரிபார்க்கிறது...' : 'Verifying in Database...'}`;
+
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone, password })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          localStorage.setItem("tn_mandi_token", data.token);
+          localStorage.setItem("tn_mandi_user", JSON.stringify(data.user));
+          showAlert(I18N[currentLang].loginSuccess, true);
+          setTimeout(goToDashboard, 900);
+        } else {
+          showAlert(data.detail || (currentLang === 'ta' ? "இந்த கைபேசி எண் அல்லது கடவுச்சொல் தரவுத்தளத்தில் இல்லை! தயவுசெய்து பதிவு செய்யவும்." : "Mobile or password not found in database. Please register."));
+        }
+      } catch (err) {
+        showAlert(currentLang === 'ta' ? "தரவுத்தள இணைப்பு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்." : "Database connection failed. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>🚀</span> <span>${I18N[currentLang].btnSubmitLoginText}</span>`;
+      }
+    }
+
+    // Registration Form Submit (Direct DB Insert)
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const full_name = document.getElementById("regName").value.trim();
+      const phone = document.getElementById("regPhone").value.trim();
+      const password = document.getElementById("regPassword").value.trim();
+      const district = document.getElementById("regDistrict").value;
+      const preferred_mandi = document.getElementById("regMandi").value || district;
+      
+      const checkedCrops = Array.from(document.querySelectorAll('.crop-pill-checkbox:checked')).map(c => c.value);
+      if (checkedCrops.length === 0) {
+        showAlert(currentLang === 'ta' ? "தயவுசெய்து குறைந்தது ஒரு பயிரையாவது தேர்ந்தெடுக்கவும்." : "Please select at least one crop to monitor.");
+        return;
+      }
+
+      const notification_channel = 'sms';
+
+      const btn = document.getElementById("btnRegisterSubmit");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${currentLang === 'ta' ? 'தரவுத்தளத்தில் சேமிக்கப்படுகிறது...' : 'Saving to Database...'}`;
+
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            full_name,
+            phone,
+            password,
+            district,
+            preferred_mandi,
+            preferred_crops: checkedCrops,
+            notification_channel
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          localStorage.setItem("tn_mandi_token", data.token);
+          localStorage.setItem("tn_mandi_user", JSON.stringify(data.user));
+          showAlert(I18N[currentLang].regSuccess, true);
+          await fetchDatabaseStatus();
+          setTimeout(goToDashboard, 1100);
+        } else {
+          showAlert(data.detail || (currentLang === 'ta' ? "பதிவு தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்." : "Registration failed."));
+        }
+      } catch (err) {
+        showAlert(currentLang === 'ta' ? "தரவுத்தள இணைப்பு தோல்வியடைந்தது." : "Database connection failed.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>✅</span> <span>${I18N[currentLang].btnSubmitRegText}</span>`;
+      }
+    }
+  </script>
+</body>
+</html>

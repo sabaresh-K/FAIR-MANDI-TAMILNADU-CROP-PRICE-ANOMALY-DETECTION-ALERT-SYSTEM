@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Large Datasets & Processed SQLite Database (188+ MB)
+data/processed/*.db
+data/processed/*.db-wal
+data/processed/*.db-shm
+data/raw/*.json
+data/raw/*.csv
+
+# Local Environment Variables & Secrets
+.env
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
