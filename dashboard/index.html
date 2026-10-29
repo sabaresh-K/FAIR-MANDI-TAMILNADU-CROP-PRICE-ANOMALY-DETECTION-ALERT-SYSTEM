@@ -160,7 +160,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link px-3 py-2 rounded-3 fw-semibold" href="/dashboard/profile.html">
-              <span>👤</span> <span class="nav-text" data-ta="சுயவிவரம் & எச்சரிக்கை" data-en="Profile & Alerts">சுயவிவரம் & எச்சரிக்கை</span>
+              <span>👤</span> <span class="nav-text" data-ta="சுயவிவரம்" data-en="Profile">சுயவிவரம்</span>
             </a>
           </li>
         </ul>
@@ -321,14 +321,6 @@
                 🗺️ வரைபடத்தில் வழித்தடத்தைப் பார் ➔
               </a>
             </div>
-          </div>
-
-          <!-- SMS Direct Share & Alerts Action -->
-          <div class="mt-auto pt-2">
-            <a id="btnSmsShare" href="#" class="btn btn-success fw-bold w-100 py-2 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 text-decoration-none">
-              <span style="font-size: 1.2rem;">💬</span>
-              <span id="btnSmsText">கைபேசி SMS-ல் பகிரவும்</span>
-            </a>
           </div>
         </div>
       </div>
@@ -818,27 +810,6 @@
           ? `${data.market} சந்தையே உங்கள் ${getDistrictName(data.district)} அதிகபட்ச விலையைத் தருகிறது. வேறு சந்தைக்கு செல்ல வேண்டியதில்லை!`
           : `${data.market} is the highest-priced mandi in ${getDistrictName(data.district)} today! No need to travel further.`;
       }
-
-      // Direct Device SMS Share link targeting logged-in farmer's phone number
-      const cropObj = CROPS.find(c => c.id.toLowerCase() === currentCrop.toLowerCase());
-      const cropDisplay = currentLang === 'ta' ? (cropObj ? cropObj.ta : currentCrop) : (cropObj ? cropObj.en : currentCrop);
-      const unitText = currentLang === 'ta' ? 'குவிண்டால்' : 'Quintal';
-      const detailWord = currentLang === 'ta' ? 'விவரங்கள்' : 'Details';
-      const smsShareBody = encodeURIComponent(
-        `[Fair Mandi] ${data.market}: ${cropDisplay} ₹${Math.round(data.modal_price)}/${unitText} (${data.pct_change_dod >= 0 ? '+' : ''}${data.pct_change_dod.toFixed(1)}%). ${detailWord}: http://127.0.0.1:8000/dashboard`
-      );
-      let targetDest = "";
-      try {
-        const u = JSON.parse(localStorage.getItem("tn_mandi_user") || "{}");
-        if (u && u.phone) {
-          const digits = u.phone.replace(/\D/g, "");
-          targetDest = digits.startsWith("91") ? `+${digits}` : (digits.length === 10 ? `+91${digits}` : `+${digits}`);
-        }
-      } catch(e) {}
-      const btnSms = document.getElementById("btnSmsShare");
-      if (btnSms) {
-        btnSms.href = targetDest ? `sms:${targetDest}?body=${smsShareBody}` : `sms:?body=${smsShareBody}`;
-      }
     }
 
     function renderAllCropsTable(cropsData) {
@@ -914,7 +885,6 @@
         document.getElementById("decisionCardTitle").innerText = "சந்தை விலை மற்றும் விற்பனை ஆலோசனை";
         document.getElementById("arbBoxHeading").innerText = "⭐ மாவட்ட அதிக விலை ஒப்பீடு:";
         document.getElementById("btnArbRouteLink").innerText = "🗺️ வரைபடத்தில் வழித்தடத்தைப் பார் ➔";
-        document.getElementById("btnSmsText").innerText = "கைபேசி SMS-ல் நண்பர்களுக்கு பகிரவும்";
         document.getElementById("allCropsTableTitle").innerText = "இன்றைய அனைத்து பயிர் விலைகள்";
         document.getElementById("thCrop").innerText = "பயிர்";
         document.getElementById("thPrice").innerText = "சந்தை விலை (₹/குவி)";
@@ -948,7 +918,6 @@
         document.getElementById("decisionCardTitle").innerText = "Market Price & Trading Decision";
         document.getElementById("arbBoxHeading").innerText = "⭐ District Price Comparison:";
         document.getElementById("btnArbRouteLink").innerText = "🗺️ View Route on Map ➔";
-        document.getElementById("btnSmsText").innerText = "Share via Mobile SMS";
         document.getElementById("allCropsTableTitle").innerText = "All Crops Live Price Board";
         document.getElementById("thCrop").innerText = "Crop";
         document.getElementById("thPrice").innerText = "Market Price (₹/Q)";

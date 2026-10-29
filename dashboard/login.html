@@ -442,15 +442,6 @@
               </div>
             </div>
 
-            <!-- Dedicated 1-Click Mobile SMS Price Alert Feature Info -->
-            <div class="mb-4 p-3 bg-light border border-success-subtle rounded-3 d-flex align-items-center gap-3">
-              <span class="fs-3">📲</span>
-              <div>
-                <strong class="text-success small d-block" id="lblRegChannelTitle">1-கிளிக் கைபேசி SMS எச்சரிக்கை சேவை</strong>
-                <span class="text-secondary small" id="lblRegChannelDesc">நீங்கள் உள்நுழையும் போது வழங்கும் இந்த மொபைல் எண்ணிற்கு முக்கிய விலை மாற்றங்கள் மற்றும் விற்பனை முடிவுகள் 1-கிளிக் SMS மூலம் உடனுக்குடன் வழங்கப்படும்.</span>
-              </div>
-            </div>
-
             <!-- Register Button -->
             <button type="submit" class="btn-auth-submit" id="btnRegisterSubmit">
               <span>✅</span>
@@ -584,8 +575,6 @@
         lblRegMandi: "முதன்மை சந்தை:",
         lblRegCrops: "கண்காணிக்க விரும்பும் பயிர்கள்:",
         lblPickCropsNote: "(குறைந்தது 1 பயிர் தேர்வு செய்க)",
-        lblRegChannelTitle: "1-கிளிக் கைபேசி SMS எச்சரிக்கை சேவை",
-        lblRegChannelDesc: "நீங்கள் உள்நுழையும் போது வழங்கும் இந்த மொபைல் எண்ணிற்கு முக்கிய விலை மாற்றங்கள் மற்றும் விற்பனை முடிவுகள் 1-கிளிக் SMS மூலம் உடனுக்குடன் வழங்கப்படும்.",
         btnSubmitRegText: "பதிவு செய்து தொடர்க",
         lblHaveAccount: "ஏற்கனவே கணக்கு உள்ளதா?",
         linkGoLogin: "உள்நுழைக",
@@ -623,8 +612,6 @@
         lblRegMandi: "Preferred Primary Mandi:",
         lblRegCrops: "Crops to Monitor:",
         lblPickCropsNote: "(Choose at least 1 crop)",
-        lblRegChannelTitle: "1-Click Mobile SMS Price Alerts",
-        lblRegChannelDesc: "Your registered mobile number provided at login receives instant 1-click SMS alerts for price spikes and selling decisions.",
         btnSubmitRegText: "Register & Continue",
         lblHaveAccount: "Already have an account?",
         linkGoLogin: "Login Here",
@@ -730,8 +717,6 @@
       document.getElementById("lblRegMandi").innerText = t.lblRegMandi;
       document.getElementById("lblRegCrops").innerText = t.lblRegCrops;
       document.getElementById("lblPickCropsNote").innerText = t.lblPickCropsNote;
-      document.getElementById("lblRegChannelTitle").innerText = t.lblRegChannelTitle;
-      document.getElementById("lblRegChannelDesc").innerText = t.lblRegChannelDesc;
       document.getElementById("btnSubmitRegText").innerText = t.btnSubmitRegText;
       document.getElementById("lblHaveAccount").innerText = t.lblHaveAccount;
       document.getElementById("linkGoLogin").innerText = t.linkGoLogin;
@@ -924,7 +909,7 @@
         return;
       }
 
-      const notification_channel = 'sms';
+      const notification_channel = 'web';
 
       const btn = document.getElementById("btnRegisterSubmit");
       btn.disabled = true;

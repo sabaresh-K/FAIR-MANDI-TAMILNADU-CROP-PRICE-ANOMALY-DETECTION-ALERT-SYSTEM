@@ -21,8 +21,7 @@
    - [4.5 AI Trading Recommendation Engine (Decision Heuristics)](#45-ai-trading-recommendation-engine-decision-heuristics)
    - [4.6 Spatial Arbitrage & Net Economic Gain Modeling](#46-spatial-arbitrage--net-economic-gain-modeling)
    - [4.7 7-Day Model Price Forecasting & Uncertainty Estimation](#47-7-day-model-price-forecasting--uncertainty-estimation)
-   - [4.8 1-Click Native Mobile SMS Alert Delivery Protocol](#48-1-click-native-mobile-sms-alert-delivery-protocol)
-   - [4.9 Strict 100% Bilingual Localization Engine](#49-strict-100-bilingual-localization-engine)
+   - [4.8 Strict 100% Bilingual Localization Engine](#48-strict-100-bilingual-localization-engine)
 5. [System Architecture & End-to-End Data Flow](#5-system-architecture--end-to-end-data-flow)
 6. [Comparative Analysis: Existing Govt Portals vs. Our Solution](#6-comparative-analysis-existing-govt-portals-vs-our-solution)
 7. [Impact & Real-World Benefits for Tamil Nadu Farmers](#7-impact--real-world-benefits-for-tamil-nadu-farmers)
@@ -34,7 +33,7 @@
 
 Agriculture forms the socioeconomic backbone of Tamil Nadu, sustaining millions of smallholder and marginal farmers across its 38 districts. Despite strong agricultural output, farmers frequently suffer devastating income losses due to **opaque mandi price volatility, localized price crashes, and severe spatial price fragmentation**. 
 
-**Uzhavan Sandhai AI (உழவன் சந்தை AI)** is an intelligent, full-stack decision-support and market intelligence platform designed specifically for Tamil Nadu's agricultural landscape. It transforms raw, fragmented mandi data into actionable, plain-language economic decisions. By coupling **STL (Seasonal and Trend decomposition using LOESS)** time-series modeling, **multi-factor anomaly detection**, and **Haversine geospatial arbitrage calculation** with a **zero-cost 1-Click Native Mobile SMS engine**, the platform equips farmers with timely intelligence on:
+**Uzhavan Sandhai AI (உழவன் சந்தை AI)** is an intelligent, full-stack decision-support and market intelligence platform designed specifically for Tamil Nadu's agricultural landscape. It transforms raw, fragmented mandi data into actionable, plain-language economic decisions. By coupling **STL (Seasonal and Trend decomposition using LOESS)** time-series modeling, **multi-factor anomaly detection**, and **Haversine geospatial arbitrage calculation** with an **interactive responsive web platform**, the platform equips farmers with timely intelligence on:
 1. **Whether to Sell Today or Hold**: Identifying abnormal price surges versus localized manipulation.
 2. **Where to Sell for Maximum Profit**: Pinpointing nearby mandis in the same district offering significantly higher prices even after deducting transport and fuel expenses.
 3. **What Tomorrow's Prices Look Like**: Delivering 7-day predictive projections with confidence intervals.
@@ -62,7 +61,7 @@ While government portals like Agmarknet and the Tamil Nadu Agricultural Universi
 1. **Dense, Tabular Formats**: Data is buried in complex multi-dropdown HTML tables with English-only headers, slow load times, and no visual trend graphics.
 2. **Zero Actionability**: They show raw numbers (e.g., "Modal: ₹2,400") but offer no advisory: *Is this price higher than normal? Should I harvest today or hold for 3 days? Is another market nearby paying more?*
 3. **No Spatial Intelligence**: Farmers cannot calculate distances, fuel expenditures, or net profit margins between competing mandis.
-4. **High Technical Friction**: Requires high-speed internet, desktop browsers, or paid third-party SMS subscriptions with complex login forms.
+4. **High Technical Friction**: Requires high-speed internet, desktop browsers, or complex multi-step navigation forms.
 
 ---
 
@@ -77,7 +76,7 @@ Opaque Pricing & Word-of-Mouth  ───────────►  Live 24/7 
 Distress Selling & Panic Dumps  ───────────►  AI Recommendation Engine (SELL NOW / HOLD / NORMAL) + Anomaly Detection
 Spatial Price Blindspots        ───────────►  District Arbitrage Engine (Haversine Distance + Net Gain Formula)
 Language & Literacy Barriers    ───────────►  100% Strict Bilingual English / Tamil Localization
-Lack of Paid Gateways / DLT     ───────────►  1-Click Native Mobile SMS Alert Engine (Zero Cost, Carrier-Direct)
+Complex Government Portals      ───────────►  Mobile-First Lightweight Responsive Interface
 ```
 
 ### 3.2 Solution Breakdown by Feature & Page
@@ -87,7 +86,6 @@ Lack of Paid Gateways / DLT     ───────────►  1-Click Na
 * Instant conversion of bulk rates to consumer packaging (₹/Quintal to ₹/25 kg crate).
 * **AI Recommendation Badge**: Prominently highlights whether current market behavior warrants immediate harvesting/sale (`SELL_NOW`), delayed liquidation (`HOLD`), or standard routine trading (`NORMAL`).
 * **District Arbitrage Champion**: Directly on the main card, informs the farmer if another mandi in their district offers superior net profit.
-* **1-Click Mobile SMS Share**: Pre-fills the alert into the mobile SMS app with one tap.
 
 #### 2. Price Analytics & 7-Day Forecast (`dashboard/analytics.html`)
 * Interactive Chart.js time-series plots depicting recent 14 to 90-day price trajectories.
@@ -106,12 +104,11 @@ Lack of Paid Gateways / DLT     ───────────►  1-Click Na
 #### 4. Farmer Authentication & Personalized Onboarding (`dashboard/login.html`)
 * Mobile-first authentication using the farmer's **10-digit phone number** and secure PIN/password.
 * Seamless preference configuration: Select district, primary mandi, and monitored crops.
-* Explicit user consent and explanation of the 1-Click Mobile SMS alert service.
 
-#### 5. Farmer Profile & 1-Click SMS Alert Center (`dashboard/profile.html`)
-* Complete overview of farmer credentials and active preferences.
-* **Instant Alert Dispatcher**: Tapping `📲 Send Live SMS to My Mobile (+91)` generates today's custom market advisory and opens the device's native SMS Messages app with recipient and text pre-filled.
-* **Audit History Table**: Log of all historical alerts (Price Spikes, Crashes, Arbitrage opportunities) with 1-click re-send links.
+#### 5. Farmer Profile & Preferences Dashboard (`dashboard/profile.html`)
+* Complete overview of farmer credentials, registered mobile, district, and monitored crops.
+* **Quick Navigation Center**: Instant one-tap access to Live Board, GIS Map, and Price Analytics.
+* **Account Security**: Verified session management with secure PBKDF2 hashing.
 
 ---
 
@@ -226,23 +223,7 @@ Where uncertainty widens naturally as the forecast horizon $h$ extends into the 
 
 ---
 
-### 4.8 1-Click Native Mobile SMS Alert Delivery Protocol
-In India, TRAI (Telecom Regulatory Authority of India) and DLT (Distributed Ledger Technology) mandates heavily restrict server-to-phone SMS gateways, requiring registered sender IDs, expensive carrier credits, and pre-approved template scrubs. 
-
-To overcome this, our system implements the **1-Click Native Device Telecom Protocol**:
-
-```text
-URI Scheme: sms:+91[FARMER_PHONE]?body=[ENCODED_ALERT_TEXT]
-```
-
-1. **Zero Setup & Zero Cost**: When the farmer clicks `📲 Send Live SMS to My Mobile (+91)`, the backend pre-formats an alert message customized to the farmer's name, mandi, and crop.
-2. **Direct Handset Dispatch**: The browser invokes the operating system's native SMS application (Google Messages, Samsung Messages, iOS Messages).
-3. **Pre-filled Payload**: The farmer's registered phone number is placed into the `To:` field, and the alert message is pre-typed into the composer.
-4. **Instant Dispatch**: The farmer taps the send button with one touch using their SIM card, guaranteeing delivery without reliance on third-party servers.
-
----
-
-### 4.9 Strict 100% Bilingual Localization Engine
+### 4.8 Strict 100% Bilingual Localization Engine
 Recognizing that linguistic accessibility is vital for rural adoption in Tamil Nadu, the entire frontend is governed by a **strict client-side localization system**:
 * Instant toggle button between **தமிழ் (Tamil)** and **English**.
 * Translates 100% of headers, subtext, table columns, crop names (e.g., Tomato $\rightarrow$ தக்காளி, Onion $\rightarrow$ வெங்காயம்), unit types (Quintal $\rightarrow$ குவிண்டால்), and decision rationales.
@@ -291,7 +272,7 @@ flowchart TD
         D1[Main Dashboard\nindex.html]
         D2[Price Analytics\nanalytics.html]
         D3[Mandi GIS Map\nmap.html]
-        D4[Farmer Profile & Alerts\nprofile.html]
+        D4[Farmer Profile\nprofile.html]
         D5[Login & Register\nlogin.html]
         
         C1 --> D1
@@ -299,15 +280,6 @@ flowchart TD
         C1 --> D3
         C1 --> D4
         C1 --> D5
-    end
-
-    subgraph Delivery & Farmer Handset
-        E1[1-Click Native Mobile SMS URI\nsms:+91XXXXXXXXXX?body=...]
-        E2[Farmer Mobile Handset\nAndroid / iOS Native Messages App]
-        
-        D1 --> E1
-        D4 --> E1
-        E1 --> E2
     end
 ```
 
@@ -323,7 +295,6 @@ flowchart TD
 | **Geographic Arbitrage** | ❌ Farmer must manually compare tables | ✅ **Automated Net Gain Calculator** accounting for fuel & transport |
 | **Interactive GIS Map** | ❌ Static text-based lists | ✅ **Full Leaflet.js interactive map** with price-coded pins |
 | **Price Forecasting** | ❌ Historical quotes only | ✅ **7-Day Model Projections** with confidence bands |
-| **Mobile Alert Dispatch** | ⚠️ Expensive, delayed bulk gateways | ✅ **1-Click Native Device SMS** directly to registered numbers |
 | **Linguistic Usability** | ⚠️ Complex English tables | ✅ **100% Strict Bilingual English & Tamil Separation** |
 | **Database Performance** | ⚠️ Slow page loads on rural connections | ✅ **Sub-second SQLite WAL API responses (< 20ms)** |
 
@@ -356,4 +327,4 @@ http://127.0.0.1:8000/dashboard/index.html
 ```bash
 python -m unittest discover tests
 ```
-* **Test Results**: All **21 unit tests** pass with 0 errors, validating ETL parsing, STL decomposition, Haversine spatial comparisons, authentication security, and 1-Click Mobile SMS URI generation.
+* **Test Results**: All **21 unit tests** pass with 0 errors, validating ETL parsing, STL decomposition, Haversine spatial comparisons, and authentication security.

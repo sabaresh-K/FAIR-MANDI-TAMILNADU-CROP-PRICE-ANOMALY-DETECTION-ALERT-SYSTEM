@@ -34,7 +34,7 @@ class RegisterRequest(BaseModel):
     district: str = Field(default="Madurai")
     preferred_mandi: str = Field(default="Madurai")
     preferred_crops: List[str] = Field(default=["Tomato"])
-    notification_channel: str = Field(default="sms") # Dedicated cellular SMS alert
+    notification_channel: str = Field(default="web")
 
 
 class LoginRequest(BaseModel):
@@ -104,7 +104,7 @@ def init_auth_tables():
         district TEXT NOT NULL,
         preferred_mandi TEXT NOT NULL,
         preferred_crops TEXT NOT NULL,
-        notification_channel TEXT DEFAULT 'sms',
+        notification_channel TEXT DEFAULT 'web',
         alert_active INTEGER DEFAULT 1,
         created_at TEXT NOT NULL,
         last_login TEXT

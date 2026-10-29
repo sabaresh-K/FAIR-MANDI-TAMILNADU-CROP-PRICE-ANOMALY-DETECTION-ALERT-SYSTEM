@@ -32,15 +32,6 @@ from api.auth import (
     ProfileUpdateRequest
 )
 from pydantic import BaseModel
-from notifications.alert_service import (
-    init_notification_tables,
-    send_farmer_notification,
-    get_farmer_notification_history,
-    trigger_automated_market_alerts,
-    get_gateway_status,
-    save_gateway_config,
-    reload_gateway_config
-)
 import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -81,14 +72,12 @@ async def startup_event():
 
     try:
         init_auth_tables()
-        init_notification_tables()
     except Exception as e:
-        logger.warning(f"Error initializing auth/notification tables: {e}")
+        logger.warning(f"Error initializing auth tables: {e}")
 
     logger.info("Starting APScheduler for daily pipeline job...")
-    # Schedule pipeline to run daily at 06:00 AM, and alert notifications at 07:00 AM
+    # Schedule pipeline to run daily at 06:00 AM
     scheduler.add_job(run_pipeline, "cron", hour=6, minute=0, id="daily_pipeline")
-    scheduler.add_job(trigger_automated_market_alerts, "cron", hour=7, minute=0, id="daily_notifications")
     scheduler.start()
 
     # Check database freshness: if max_date < today or missing, sync immediately in background
@@ -238,126 +227,6 @@ def api_update_profile(req: ProfileUpdateRequest, authorization: Optional[str] =
 def api_database_info():
     """Returns database connection status and real registered farmer statistics from SQLite."""
     return get_database_auth_status()
-
-
-# ==========================================
-# Automated Notification & Alerts API Routes
-# ==========================================
-
-class GatewayConfigRequest(BaseModel):
-    fast2sms_api_key: Optional[str] = None
-    twilio_account_sid: Optional[str] = None
-    twilio_auth_token: Optional[str] = None
-    twilio_sms_number: Optional[str] = None
-
-
-@app.get("/api/notifications/status")
-def api_notification_status():
-    """Returns active delivery gateways status for dedicated cellular SMS."""
-    return get_gateway_status()
-
-
-@app.post("/api/notifications/save-gateways")
-def api_save_gateways(req: GatewayConfigRequest):
-    """Saves Fast2SMS and carrier SMS credentials into system configuration."""
-    config_dict = {}
-    if req.fast2sms_api_key is not None:
-        config_dict["FAST2SMS_API_KEY"] = req.fast2sms_api_key
-    if req.twilio_account_sid is not None:
-        config_dict["TWILIO_ACCOUNT_SID"] = req.twilio_account_sid
-    if req.twilio_auth_token is not None:
-        config_dict["TWILIO_AUTH_TOKEN"] = req.twilio_auth_token
-    if req.twilio_sms_number is not None:
-        config_dict["TWILIO_SMS_NUMBER"] = req.twilio_sms_number
-
-    updated_status = save_gateway_config(config_dict)
-    return {"success": True, "message": "SMS gateway credentials updated.", "status": updated_status}
-
-
-@app.post("/api/notifications/send-test")
-def api_send_test_notification(authorization: Optional[str] = Header(None), token: Optional[str] = Query(None)):
-    """Sends a real carrier SMS test alert to the authenticated farmer's mobile phone."""
-    auth_token = token
-    if not auth_token and authorization:
-        parts = authorization.split()
-        auth_token = parts[1] if len(parts) == 2 and parts[0].lower() == "bearer" else authorization
-
-    if not auth_token:
-        raise HTTPException(status_code=401, detail="Authentication token required.")
-
-    user = get_user_by_token(auth_token)
-    if not user:
-        raise HTTPException(status_code=401, detail="Session expired or invalid.")
-
-    # Prepare sample price data for test alert
-    preferred_crop = "Tomato"
-    try:
-        import json
-        crops = json.loads(user.get("preferred_crops", "[]"))
-        if crops and len(crops) > 0:
-            preferred_crop = crops[0]
-    except Exception:
-        pass
-
-    market = user.get("preferred_mandi", "Madurai")
-    district = user.get("district", "Tamil Nadu")
-
-    test_data = {
-        "modal_price": 2850.0,
-        "pct_change_dod": 12.5,
-        "district": district,
-        "best_higher_price_mandi": None
-    }
-
-    try:
-        res = send_farmer_notification(
-            user=user,
-            alert_type="TEST_ALERT",
-            commodity=preferred_crop,
-            market=market,
-            data=test_data
-        )
-        return {
-            "success": True,
-            "phone": user["phone"],
-            "farmer_name": user["full_name"],
-            "sms_url": res.get("sms_url"),
-            "sms_text": res.get("sms_text"),
-            "message_title": res.get("title"),
-            "message_body": res.get("message_body"),
-            "status": res.get("status"),
-            "gateway": res.get("gateway"),
-            "details": res
-        }
-    except Exception as e:
-        logger.error(f"Error sending test SMS notification: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to dispatch SMS alert: {str(e)}")
-
-
-@app.get("/api/notifications/history")
-def api_notification_history(authorization: Optional[str] = Header(None), token: Optional[str] = Query(None)):
-    """Returns delivery history of SMS and WhatsApp notifications sent to this farmer."""
-    auth_token = token
-    if not auth_token and authorization:
-        parts = authorization.split()
-        auth_token = parts[1] if len(parts) == 2 and parts[0].lower() == "bearer" else authorization
-
-    if not auth_token:
-        raise HTTPException(status_code=401, detail="Authentication token required.")
-
-    user = get_user_by_token(auth_token)
-    if not user:
-        raise HTTPException(status_code=401, detail="Session expired or invalid.")
-
-    history = get_farmer_notification_history(user["id"])
-    return {"history": history, "phone": user["phone"]}
-
-
-@app.post("/api/notifications/trigger-batch")
-def api_trigger_batch_alerts():
-    """Triggers the automated alert scan across all registered farmers."""
-    res = trigger_automated_market_alerts()
-    return res
 
 
 @app.get("/commodities", response_model=List[str])

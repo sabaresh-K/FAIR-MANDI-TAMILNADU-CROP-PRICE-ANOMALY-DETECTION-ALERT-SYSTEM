@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">விவசாயி சுயவிவரம் & SMS எச்சரிக்கை அமைப்புகள் | Fair Mandi</title>
+  <title id="pageTitle">விவசாயி சுயவிவரம் | Fair Mandi</title>
   
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,6 +79,24 @@
       font-size: 0.85rem;
       font-weight: 600;
     }
+
+    /* Feature Action Card */
+    .feature-action-card {
+      background: #ffffff;
+      border: 1px solid #c8e6c9;
+      border-radius: 14px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 100%;
+    }
+    .feature-action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(46, 125, 50, 0.12);
+      color: inherit;
+    }
   </style>
 </head>
 <body>
@@ -112,7 +130,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link px-3 py-2 rounded-3 fw-semibold active" href="/dashboard/profile.html">
-              <span>👤</span> <span class="nav-text" data-ta="சுயவிவரம் & SMS எச்சரிக்கை" data-en="Profile & SMS Alerts">சுயவிவரம் & SMS எச்சரிக்கை</span>
+              <span>👤</span> <span class="nav-text" data-ta="சுயவிவரம்" data-en="Profile">சுயவிவரம்</span>
             </a>
           </li>
         </ul>
@@ -137,7 +155,7 @@
       <div style="font-size: 3.5rem;">🔒</div>
       <h4 class="fw-bold mt-3" id="loginReqTitle">உள்நுழைவு தேவை</h4>
       <p class="text-muted" style="max-width: 500px; margin: 0 auto;" id="loginReqSub">
-        உங்கள் மொபைல் எண்ணிற்கு தினசரி நேரலை SMS விலை எச்சரிக்கைகளைப் பெற தயவுசெய்து உள்நுழையவும் அல்லது பதிவு செய்யவும்.
+        உங்கள் தனிப்பயனாக்கப்பட்ட பயிர் கண்காணிப்பு மற்றும் சுயவிவர அமைப்புகளை அணுக தயவுசெய்து உள்நுழையவும் அல்லது பதிவு செய்யவும்.
       </p>
       <div class="mt-4 d-flex justify-content-center gap-3">
         <a href="/dashboard/login.html" class="btn btn-success fw-bold px-4 py-2 rounded-pill shadow-sm" id="btnLoginReqAction">
@@ -172,9 +190,6 @@
             <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill small" id="badgeActiveStatus">
               நிலை: <strong class="text-success">செயலில் உள்ளது</strong>
             </span>
-            <div class="mt-2" id="farmerChannelsContainer">
-              <span class="badge bg-primary px-3 py-1">💬 நேரடி SMS எச்சரிக்கை செயலில் உள்ளது</span>
-            </div>
           </div>
         </div>
 
@@ -194,69 +209,66 @@
         </div>
       </div>
 
-      <!-- Test SMS Notification Dispatcher Box -->
-      <div class="profile-card mb-4" style="background: linear-gradient(135deg, #f9fbf9 0%, #f1f8f1 100%);">
-        <h5 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
-          <span>🔔</span>
-          <span id="testDispatcherTitle">நேரலை மொபைல் SMS எச்சரிக்கை சோதனை</span>
+      <!-- Quick Portals & Features Navigation -->
+      <div class="profile-card mb-4">
+        <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2" id="quickNavTitle">
+          <span>🚀</span> <span>சந்தை விரைவு வழிசெலுத்தல்</span>
         </h5>
-        <p class="small text-secondary mb-3" id="testDispatcherSub">
-          உங்கள் பதிவு செய்யப்பட்ட மொபைல் எண்ணிற்கு இன்றைய விலை நிலவரத்துடன் கூடிய நேரலை SMS அறிவிப்பை உடனே அனுப்பி சோதிக்கலாம்.
-        </p>
-
-        <button class="btn btn-success fw-bold w-100 py-3 shadow-sm rounded-3 d-flex align-items-center justify-content-center gap-2" onclick="triggerTestAlert(this)" id="btnSendTest">
-          <span style="font-size: 1.2rem;">📲</span>
-          <span id="btnSendTestText">என் கைபேசி எண்ணிற்கு நேரடி SMS அனுப்பு</span>
-        </button>
-
-        <div id="testStatusMsg" class="mt-3 text-center small fw-semibold d-none"></div>
-
-        <!-- Direct Handset Action Box (Instant 1-Click Mobile SMS App Opening) -->
-        <div id="directActionButtons" class="mt-3 p-3 bg-white border border-success rounded-3 shadow-sm d-none">
-          <div class="fw-bold text-dark small mb-2 d-flex align-items-center justify-content-between flex-wrap gap-1">
-            <span id="instantHandsetTitle">🚀 <strong>உங்கள் கைபேசி SMS செயலியில் திறக்கவும்:</strong></span>
-            <span class="badge bg-success-subtle text-success border border-success-subtle" id="badgeInstant">1-கிளிக் நேரடி SMS</span>
-          </div>
-          <div class="d-flex gap-2 flex-wrap mb-2">
-            <a id="btnDirectSMS" href="#" class="btn btn-primary fw-bold w-100 d-flex align-items-center justify-content-center gap-2 py-2 text-decoration-none shadow-sm">
-              <span style="font-size:1.3rem;">💬</span>
-              <span id="btnDirectSMSText">மொபைல் SMS செயலியில் செய்தி பார்க்க / அனுப்ப</span>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <a href="/dashboard/index.html" class="feature-action-card">
+              <div class="fs-3 mb-2">🏠</div>
+              <h6 class="fw-bold text-success mb-1" id="navCard1Title">நேரலை சந்தை பலகை</h6>
+              <p class="small text-muted mb-0" id="navCard1Sub">இன்றைய சந்தை விலை மற்றும் உகந்த விற்பனை முடிவுகளைக் காண்க.</p>
             </a>
           </div>
-          <div class="small text-muted text-center" id="gatewayHintNote">
-            💡 உங்கள் பதிவு செய்யப்பட்ட கைபேசி எண்ணிற்கு (+91...) 1-கிளிக் SMS உடனே உருவாக்கப்பட்டு SMS செயலி திறக்கப்படும்.
+          <div class="col-md-4">
+            <a href="/dashboard/map.html" class="feature-action-card">
+              <div class="fs-3 mb-2">🗺️</div>
+              <h6 class="fw-bold text-success mb-1" id="navCard2Title">மாவட்ட வரைபடம்</h6>
+              <p class="small text-muted mb-0" id="navCard2Sub">உங்கள் மாவட்டத்திற்குள் அதிக விலை தரும் சந்தைகள் மற்றும் பயணத் தொலைவு.</p>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <a href="/dashboard/analytics.html" class="feature-action-card">
+              <div class="fs-3 mb-2">📊</div>
+              <h6 class="fw-bold text-success mb-1" id="navCard3Title">விலை ஆய்வு & கணிப்பு</h6>
+              <p class="small text-muted mb-0" id="navCard3Sub">14 நாள் சந்தை போக்கு மற்றும் 7 நாள் மாதிரி கணிப்பு வரைபடங்கள்.</p>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Notification Delivery History Card -->
+      <!-- Account Details & Preferences Card -->
       <div class="profile-card">
-        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom flex-wrap gap-2">
-          <h5 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
-            <span>📜</span>
-            <span id="historyHeading">அனுப்பப்பட்ட SMS வரலாற்றுப் பதிவுகள்</span>
-          </h5>
-          <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="loadNotificationHistory()" id="btnRefreshHistory">
-            🔄 புதுப்பி
-          </button>
-        </div>
-
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-          <table class="table table-sm table-hover align-middle border text-center mb-0" style="font-size: 0.85rem;">
-            <thead class="table-light sticky-top">
-              <tr>
-                <th id="thHistTime">நேரம்</th>
-                <th id="thHistChan">சேவை</th>
-                <th id="thHistType">வகை</th>
-                <th id="thHistStatus">நிலை</th>
-                <th id="thHistMsg">SMS செய்தி முன்னோட்டம்</th>
-                <th class="text-center" id="thHistAction">செயல்</th>
-              </tr>
-            </thead>
-            <tbody id="notificationHistoryBody">
-              <tr><td colspan="6" class="text-center py-4 text-muted">வரலாறு ஏற்றப்படுகிறது...</td></tr>
-            </tbody>
-          </table>
+        <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2" id="accDetailsTitle">
+          <span>📋</span> <span>கணக்கு மற்றும் விருப்பத்தேர்வுகள்</span>
+        </h5>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <span class="small text-muted d-block" id="lblPrefMandi">விருப்பமான முதன்மை சந்தை:</span>
+              <strong class="fs-6 text-dark" id="displayPrefMandi">-</strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <span class="small text-muted d-block" id="lblPrefDistrict">பதிவு செய்யப்பட்ட மாவட்டம்:</span>
+              <strong class="fs-6 text-dark" id="displayPrefDistrict">-</strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <span class="small text-muted d-block" id="lblSecurityMode">பாதுகாப்பு & மறைகுறியாக்கம்:</span>
+              <strong class="fs-6 text-success" id="valSecurityMode">PBKDF2 SHA-256 (உறுதியானது)</strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <span class="small text-muted d-block" id="lblSessionStatus">அமர்வு நிலை:</span>
+              <strong class="fs-6 text-success" id="valSessionStatus">🟢 அங்கீகரிக்கப்பட்ட அமர்வு செயலில் உள்ளது</strong>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -266,7 +278,7 @@
 
   <!-- Footer -->
   <footer class="bg-white border-top py-2 text-center text-muted small mt-auto">
-    <span id="footerBrandNote">Fair Mandi — விவசாயி சுயவிவரம் & தானியங்கி SMS எச்சரிக்கை மேலாண்மை | 2026</span>
+    <span id="footerBrandNote">Fair Mandi — விவசாயி சுயவிவரம் & நேரலை சந்தை நுண்ணறிவு மேடை | 2026</span>
   </footer>
 
   <!-- Scripts -->
@@ -393,9 +405,6 @@
               </div>
             `;
           }
-
-          loadNotificationHistory();
-          loadGatewayStatus();
         } else {
           localStorage.removeItem("tn_mandi_token");
           if (notLoggedInCard) notLoggedInCard.classList.remove("d-none");
@@ -413,6 +422,9 @@
       document.getElementById("farmerLocation").innerText = getDistrictName(user.district || "Madurai");
       document.getElementById("farmerMandi").innerText = getMandiDisplayName(user.preferred_mandi || "Madurai");
 
+      document.getElementById("displayPrefMandi").innerText = getMandiDisplayName(user.preferred_mandi || "Madurai");
+      document.getElementById("displayPrefDistrict").innerText = getDistrictName(user.district || "Madurai");
+
       let crops = [];
       try {
         crops = typeof user.preferred_crops === 'string' ? JSON.parse(user.preferred_crops) : (user.preferred_crops || []);
@@ -424,13 +436,6 @@
       if (cropsContainer) {
         cropsContainer.innerHTML = crops.map(c => `<span class="crop-badge-pill">${getCropDisplayName(c)}</span>`).join("");
       }
-
-      const chanContainer = document.getElementById("farmerChannelsContainer");
-      if (chanContainer) {
-        chanContainer.innerHTML = currentLang === 'ta'
-          ? `<span class="badge bg-primary px-3 py-1">💬 நேரடி SMS எச்சரிக்கை செயலில் உள்ளது</span>`
-          : `<span class="badge bg-primary px-3 py-1">💬 Direct Cellular SMS Alerts Active</span>`;
-      }
     }
 
     function logoutFarmer() {
@@ -439,142 +444,11 @@
       window.location.reload();
     }
 
-    async function triggerTestAlert(btn) {
-      const token = localStorage.getItem("tn_mandi_token");
-      if (!token) return;
-
-      const origHtml = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status"></span> ${currentLang === 'ta' ? 'அனுப்பப்படுகிறது...' : 'Dispatching...'}`;
-      const statusDiv = document.getElementById("testStatusMsg");
-      const directCard = document.getElementById("directActionButtons");
-      if (statusDiv) statusDiv.classList.add("d-none");
-      if (directCard) directCard.classList.add("d-none");
-
-      try {
-        const res = await fetch(`/api/notifications/send-test?token=${encodeURIComponent(token)}`, {
-          method: "POST"
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          if (statusDiv) {
-            statusDiv.className = "mt-3 p-3 bg-success-subtle text-success-emphasis border border-success-subtle rounded-3 small fw-bold text-center";
-            statusDiv.innerHTML = currentLang === 'ta'
-              ? `✅ உங்கள் பதிவு செய்யப்பட்ட எண் <strong>+91 ${data.phone}</strong>-க்கு 1-கிளிக் SMS தயார்!`
-              : `✅ 1-Click Mobile SMS ready for your registered number <strong>+91 ${data.phone}</strong>!`;
-            statusDiv.classList.remove("d-none");
-          }
-
-          if (directCard) {
-            const btnSMS = document.getElementById("btnDirectSMS");
-            if (btnSMS && data.sms_url) {
-              btnSMS.href = data.sms_url;
-            }
-            directCard.classList.remove("d-none");
-          }
-
-          if (data.sms_url) {
-            window.location.href = data.sms_url;
-          }
-
-          await loadNotificationHistory();
-        } else {
-          if (statusDiv) {
-            statusDiv.className = "mt-3 p-2 bg-danger-subtle text-danger-emphasis border border-danger-subtle rounded-3 small fw-bold text-center";
-            statusDiv.innerText = currentLang === 'ta' 
-              ? `❌ SMS பிழை: ${data.detail || 'தோல்வி'}`
-              : `❌ SMS error: ${data.detail || 'Failed'}`;
-            statusDiv.classList.remove("d-none");
-          }
-        }
-      } catch (err) {
-        if (statusDiv) {
-          statusDiv.className = "mt-3 p-2 bg-danger-subtle text-danger-emphasis border border-danger-subtle rounded-3 small fw-bold text-center";
-          statusDiv.innerText = currentLang === 'ta' ? `❌ பிழை: ${err.message}` : `❌ Error: ${err.message}`;
-          statusDiv.classList.remove("d-none");
-        }
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = origHtml;
-      }
-    }
-
-    async function loadNotificationHistory() {
-      const token = localStorage.getItem("tn_mandi_token");
-      if (!token) return;
-
-      const tbody = document.getElementById("notificationHistoryBody");
-      if (!tbody) return;
-
-      try {
-        const res = await fetch(`/api/notifications/history?token=${encodeURIComponent(token)}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        const history = data.history || [];
-
-        if (history.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">${currentLang === 'ta' ? 'இதுவரை SMS எச்சரிக்கைகள் எதுவும் அனுப்பப்படவில்லை. சோதனை SMS அனுப்ப மேலே உள்ள பொத்தானை அழுத்தவும்.' : 'No SMS notification history yet. Click the button above to dispatch a test SMS.'}</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = history.map(h => {
-          const chanBadge = `<span class="badge bg-primary">💬 SMS</span>`;
-          
-          let typeBadge = `<span class="badge bg-secondary">${h.alert_type}</span>`;
-          if (currentLang === 'ta') {
-            if (h.alert_type === 'PRICE_SPIKE') typeBadge = `<span class="badge bg-success">🟢 விலை ஏற்றம்</span>`;
-            else if (h.alert_type === 'DISTRICT_ARBITRAGE') typeBadge = `<span class="badge bg-warning text-dark">⭐ கூடுதல் லாபம்</span>`;
-            else if (h.alert_type === 'PRICE_DROP') typeBadge = `<span class="badge bg-danger">🔴 விலை சரிவு</span>`;
-            else if (h.alert_type === 'TEST_ALERT') typeBadge = `<span class="badge bg-info text-dark">📲 சோதனை SMS</span>`;
-          } else {
-            if (h.alert_type === 'PRICE_SPIKE') typeBadge = `<span class="badge bg-success">🟢 Price Spike</span>`;
-            else if (h.alert_type === 'DISTRICT_ARBITRAGE') typeBadge = `<span class="badge bg-warning text-dark">⭐ District Arbitrage</span>`;
-            else if (h.alert_type === 'PRICE_DROP') typeBadge = `<span class="badge bg-danger">🔴 Price Drop</span>`;
-            else if (h.alert_type === 'TEST_ALERT') typeBadge = `<span class="badge bg-info text-dark">📲 Test SMS</span>`;
-          }
-
-          let deliveryStatusText = h.delivery_status || 'READY';
-          if (currentLang === 'ta') {
-            if (deliveryStatusText === 'READY' || deliveryStatusText === 'Sent' || deliveryStatusText === 'DELIVERED') deliveryStatusText = "தயாராக உள்ளது";
-            else if (deliveryStatusText === 'Pending') deliveryStatusText = "காத்திருக்கிறது";
-            else if (deliveryStatusText === 'Failed') deliveryStatusText = "தோல்வி";
-          }
-          const statusBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle">${deliveryStatusText}</span>`;
-          
-          const cleanMsg = (h.message_body || '').replace(/[*_]/g, '');
-          const shortMsg = cleanMsg.slice(0, 70) + '...';
-
-          const encodedMsg = encodeURIComponent(h.message_body || '');
-          const rawDigits = (h.phone || '').replace(/\D/g, '');
-          const destDigits = rawDigits.startsWith('91') ? rawDigits : (rawDigits.length === 10 ? '91' + rawDigits : rawDigits);
-          const itemSmsUrl = `sms:+${destDigits}?body=${encodedMsg}`;
-
-          const actionLabel = currentLang === 'ta' ? "💬 SMS திற" : "💬 Open SMS";
-          const actionBtn = `<a href="${itemSmsUrl}" class="btn btn-sm btn-primary py-0 px-2 fw-bold text-decoration-none shadow-sm" style="font-size:0.75rem;">${actionLabel}</a>`;
-
-          return `
-            <tr>
-              <td class="text-nowrap text-secondary small">${h.sent_at}</td>
-              <td>${chanBadge}</td>
-              <td>${typeBadge}</td>
-              <td>${statusBadge}</td>
-              <td class="small text-truncate" style="max-width: 250px;" title="${cleanMsg.replace(/"/g, '&quot;')}">${shortMsg}</td>
-              <td class="text-nowrap text-center">${actionBtn}</td>
-            </tr>
-          `;
-        }).join("");
-
-      } catch (e) {
-        console.warn("Could not load notification history:", e);
-      }
-    }
-
     function toggleLanguage() {
       currentLang = currentLang === 'ta' ? 'en' : 'ta';
       localStorage.setItem("tn_mandi_lang", currentLang);
       updateLanguageUI();
       if (loggedInUser) renderProfileDetails(loggedInUser);
-      loadNotificationHistory();
       checkAuthSession();
     }
 
@@ -585,63 +459,61 @@
       });
 
       if (currentLang === 'ta') {
-        document.title = "விவசாயி சுயவிவரம் & 1-கிளிக் SMS எச்சரிக்கை அமைப்புகள் | Fair Mandi";
-        document.getElementById("pageTitle").innerText = "விவசாயி சுயவிவரம் & 1-கிளிக் SMS எச்சரிக்கை அமைப்புகள் | Fair Mandi";
+        document.title = "விவசாயி சுயவிவரம் | Fair Mandi";
+        document.getElementById("pageTitle").innerText = "விவசாயி சுயவிவரம் | Fair Mandi";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("navLiveFeedBadge").innerText = "24/7 சந்தை நேரலை";
         document.getElementById("loginReqTitle").innerText = "உள்நுழைவு தேவை";
-        document.getElementById("loginReqSub").innerText = "உங்கள் பதிவு செய்யப்பட்ட மொபைல் எண்ணிற்கு நேரலை SMS விலை எச்சரிக்கைகளைப் பெற தயவுசெய்து உள்நுழையவும்.";
+        document.getElementById("loginReqSub").innerText = "உங்கள் தனிப்பயனாக்கப்பட்ட பயிர் கண்காணிப்பு மற்றும் சுயவிவர அமைப்புகளை அணுக தயவுசெய்து உள்நுழையவும்.";
         document.getElementById("btnLoginReqAction").innerText = "உள்நுழைக / புதிய பதிவு";
         document.getElementById("badgeVerified").innerText = "✓ சரிபார்க்கப்பட்டது";
         document.getElementById("lblPrimaryMandi").innerText = "முதன்மை சந்தை";
         document.getElementById("badgeActiveStatus").innerHTML = `நிலை: <strong class="text-success">செயலில் உள்ளது</strong>`;
         document.getElementById("lblMonitoredCrops").innerText = "🌾 நீங்கள் கண்காணிக்கும் பயிர்கள்:";
         document.getElementById("btnLogoutBtn").innerText = "🚪 வெளியேறு";
-        document.getElementById("testDispatcherTitle").innerText = "நேரலை மொபைல் SMS எச்சரிக்கை சோதனை";
-        document.getElementById("testDispatcherSub").innerText = "உங்கள் பதிவு செய்யப்பட்ட மொபைல் எண்ணிற்கு இன்றைய விலை நிலவரத்துடன் கூடிய நேரலை SMS அறிவிப்பை உடனே அனுப்பி சோதிக்கலாம்.";
-        document.getElementById("btnSendTestText").innerText = "என் கைபேசி எண்ணிற்கு நேரடி SMS அனுப்பு (+91)";
-        document.getElementById("instantHandsetTitle").innerHTML = "🚀 <strong>உங்கள் கைபேசி SMS செயலியில் திறக்கவும்:</strong>";
-        document.getElementById("badgeInstant").innerText = "1-கிளிக் நேரடி SMS";
-        document.getElementById("btnDirectSMSText").innerText = "மொபைல் SMS செயலியில் செய்தி பார்க்க / அனுப்ப";
-        document.getElementById("gatewayHintNote").innerText = "💡 உங்கள் பதிவு செய்யப்பட்ட கைபேசி எண்ணிற்கு (+91...) 1-கிளிக் SMS உடனே உருவாக்கப்பட்டு SMS செயலி திறக்கப்படும்.";
-        document.getElementById("historyHeading").innerText = "அனுப்பப்பட்ட SMS வரலாற்றுப் பதிவுகள்";
-        document.getElementById("btnRefreshHistory").innerText = "🔄 புதுப்பி";
-        document.getElementById("thHistTime").innerText = "நேரம்";
-        document.getElementById("thHistChan").innerText = "சேவை";
-        document.getElementById("thHistType").innerText = "வகை";
-        document.getElementById("thHistStatus").innerText = "நிலை";
-        document.getElementById("thHistMsg").innerText = "SMS செய்தி முன்னோட்டம்";
-        document.getElementById("thHistAction").innerText = "செயல்";
-        document.getElementById("footerBrandNote").innerText = "Fair Mandi — விவசாயி சுயவிவரம் & 1-கிளிக் மொபைல் SMS எச்சரிக்கை மேலாண்மை | 2026";
+        document.getElementById("quickNavTitle").innerHTML = "<span>🚀</span> <span>சந்தை விரைவு வழிசெலுத்தல்</span>";
+        document.getElementById("navCard1Title").innerText = "நேரலை சந்தை பலகை";
+        document.getElementById("navCard1Sub").innerText = "இன்றைய சந்தை விலை மற்றும் உகந்த விற்பனை முடிவுகளைக் காண்க.";
+        document.getElementById("navCard2Title").innerText = "மாவட்ட வரைபடம்";
+        document.getElementById("navCard2Sub").innerText = "உங்கள் மாவட்டத்திற்குள் அதிக விலை தரும் சந்தைகள் மற்றும் பயணத் தொலைவு.";
+        document.getElementById("navCard3Title").innerText = "விலை ஆய்வு & கணிப்பு";
+        document.getElementById("navCard3Sub").innerText = "14 நாள் சந்தை போக்கு மற்றும் 7 நாள் மாதிரி கணிப்பு வரைபடங்கள்.";
+        document.getElementById("accDetailsTitle").innerHTML = "<span>📋</span> <span>கணக்கு மற்றும் விருப்பத்தேர்வுகள்</span>";
+        document.getElementById("lblPrefMandi").innerText = "விருப்பமான முதன்மை சந்தை:";
+        document.getElementById("lblPrefDistrict").innerText = "பதிவு செய்யப்பட்ட மாவட்டம்:";
+        document.getElementById("lblSecurityMode").innerText = "பாதுகாப்பு & மறைகுறியாக்கம்:";
+        document.getElementById("valSecurityMode").innerText = "PBKDF2 SHA-256 (உறுதியானது)";
+        document.getElementById("lblSessionStatus").innerText = "அமர்வு நிலை:";
+        document.getElementById("valSessionStatus").innerText = "🟢 அங்கீகரிக்கப்பட்ட அமர்வு செயலில் உள்ளது";
+        document.getElementById("footerBrandNote").innerText = "Fair Mandi — விவசாயி சுயவிவரம் & நேரலை சந்தை நுண்ணறிவு மேடை | 2026";
       } else {
-        document.title = "Farmer Profile & 1-Click Mobile SMS Alert Settings | Fair Mandi";
-        document.getElementById("pageTitle").innerText = "Farmer Profile & 1-Click Mobile SMS Alert Settings | Fair Mandi";
+        document.title = "Farmer Profile | Fair Mandi";
+        document.getElementById("pageTitle").innerText = "Farmer Profile | Fair Mandi";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("navLiveFeedBadge").innerText = "24/7 Live Mandi Feeds";
         document.getElementById("loginReqTitle").innerText = "Login Required";
-        document.getElementById("loginReqSub").innerText = "Please log in or register to receive daily live 1-click SMS mandi price alerts directly to your registered mobile phone.";
+        document.getElementById("loginReqSub").innerText = "Please log in or register to access your personalized crop tracking and profile settings.";
         document.getElementById("btnLoginReqAction").innerText = "Login / Register";
         document.getElementById("badgeVerified").innerText = "✓ Verified";
         document.getElementById("lblPrimaryMandi").innerText = "Primary Mandi";
         document.getElementById("badgeActiveStatus").innerHTML = `Status: <strong class="text-success">Active</strong>`;
         document.getElementById("lblMonitoredCrops").innerText = "🌾 Monitored Crops:";
         document.getElementById("btnLogoutBtn").innerText = "🚪 Logout";
-        document.getElementById("testDispatcherTitle").innerText = "Live Mobile SMS Alert Test Dispatcher";
-        document.getElementById("testDispatcherSub").innerText = "Open a real-time price intelligence test SMS directly on your registered mobile phone.";
-        document.getElementById("btnSendTestText").innerText = "Send Live SMS to My Mobile (+91)";
-        document.getElementById("instantHandsetTitle").innerHTML = "🚀 <strong>Open in Mobile SMS App:</strong>";
-        document.getElementById("badgeInstant").innerText = "1-Click Direct SMS";
-        document.getElementById("btnDirectSMSText").innerText = "Open & Send in Phone SMS App";
-        document.getElementById("gatewayHintNote").innerText = "💡 1-Click SMS is generated for your registered mobile number (+91...), opening directly in your smartphone's SMS composer.";
-        document.getElementById("historyHeading").innerText = "Sent SMS Notifications Audit Log";
-        document.getElementById("btnRefreshHistory").innerText = "🔄 Refresh";
-        document.getElementById("thHistTime").innerText = "Time";
-        document.getElementById("thHistChan").innerText = "Channel";
-        document.getElementById("thHistType").innerText = "Type";
-        document.getElementById("thHistStatus").innerText = "Status";
-        document.getElementById("thHistMsg").innerText = "SMS Message Preview";
-        document.getElementById("thHistAction").innerText = "Action";
-        document.getElementById("footerBrandNote").innerText = "Fair Mandi — Farmer Profile & 1-Click Mobile SMS Alert Management | 2026";
+        document.getElementById("quickNavTitle").innerHTML = "<span>🚀</span> <span>Market Quick Navigation</span>";
+        document.getElementById("navCard1Title").innerText = "Live Market Board";
+        document.getElementById("navCard1Sub").innerText = "View today's mandi prices and actionable selling advice.";
+        document.getElementById("navCard2Title").innerText = "District Mandi Map";
+        document.getElementById("navCard2Sub").innerText = "Discover higher-price mandis and travel distances within your district.";
+        document.getElementById("navCard3Title").innerText = "Price Analytics & Forecast";
+        document.getElementById("navCard3Sub").innerText = "Inspect 14-day history and 7-day model price projections.";
+        document.getElementById("accDetailsTitle").innerHTML = "<span>📋</span> <span>Account & Preferences</span>";
+        document.getElementById("lblPrefMandi").innerText = "Preferred Primary Mandi:";
+        document.getElementById("lblPrefDistrict").innerText = "Registered District:";
+        document.getElementById("lblSecurityMode").innerText = "Security & Encryption:";
+        document.getElementById("valSecurityMode").innerText = "PBKDF2 SHA-256 (Secured)";
+        document.getElementById("lblSessionStatus").innerText = "Session Status:";
+        document.getElementById("valSessionStatus").innerText = "🟢 Authenticated Session Active";
+        document.getElementById("footerBrandNote").innerText = "Fair Mandi — Farmer Profile & Live Market Intelligence Platform | 2026";
       }
     }
   </script>
