@@ -301,7 +301,7 @@
   <script>
     let currentLang = localStorage.getItem("tn_mandi_lang") || "ta";
     let currentCrop = localStorage.getItem("selected_crop") || "Tomato";
-    let currentMarket = localStorage.getItem("selected_mandi") || "";
+    let currentMarket = localStorage.getItem("selected_mandi") || "Madurai";
     let allMarkets = [];
     let loggedInUser = null;
     let analyticsChartInstance = null;
@@ -470,7 +470,8 @@
           }
         }
         if (!currentMarket && allMarkets.length > 0) {
-          currentMarket = allMarkets[0].market;
+          const defaultMandi = allMarkets.find(m => m.market.toLowerCase() === 'madurai') || allMarkets[0];
+          currentMarket = defaultMandi.market;
           localStorage.setItem("selected_mandi", currentMarket);
         }
         setupMandiSearch();
@@ -628,12 +629,6 @@
             .catch(() => {});
         }
       });
-    }
-        }
-
-      } catch (e) {
-        console.error("Error loading analytics data:", e);
-      }
     }
 
     function updateQuickStatCards(historyData, forecastData) {
