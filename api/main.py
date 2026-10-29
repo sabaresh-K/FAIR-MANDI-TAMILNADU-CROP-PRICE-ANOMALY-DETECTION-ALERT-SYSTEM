@@ -12,7 +12,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Query, BackgroundTasks, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config.config import DB_PATH, BASE_DIR
@@ -138,6 +138,13 @@ def get_db_connection():
 
 @app.get("/")
 def read_root():
+    """Redirects the root URL directly to the interactive farmer dashboard."""
+    return RedirectResponse(url="/dashboard/index.html")
+
+
+@app.get("/api/status")
+def read_api_status():
+    """Returns backend system status and documentation links."""
     return {
         "system": "Fair Mandi AI - Crop Price Anomaly & Market Intelligence System",
         "status": "online",

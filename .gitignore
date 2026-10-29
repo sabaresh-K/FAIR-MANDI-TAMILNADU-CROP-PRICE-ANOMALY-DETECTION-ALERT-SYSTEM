@@ -26,6 +26,10 @@ Thumbs.db
 desktop.ini
 *.log
 
+# IDE and Editor Files
+.idea/
+.vscode/
+
 # Reports and scratch documents
 *.docx
 *.pdf
