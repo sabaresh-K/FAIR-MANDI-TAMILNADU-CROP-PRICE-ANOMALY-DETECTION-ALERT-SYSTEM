@@ -465,18 +465,30 @@
       `).join("");
     }
 
+    // High-speed client-side caches for instantaneous 0ms map response
+    const clientMapDecisionCache = {};
+    const clientMandisMapCache = {};
+    let isPrefetchingMap = false;
+
     async function fetchMarkets() {
       try {
-        const res = await fetch("/markets-detailed");
-        if (res.ok) {
-          allMarkets = await res.json();
-          if (!currentMarket && allMarkets.length > 0) {
-            currentMarket = allMarkets[0].market;
-            localStorage.setItem("selected_mandi", currentMarket);
+        const cachedMarkets = sessionStorage.getItem("tn_all_markets");
+        if (cachedMarkets) {
+          allMarkets = JSON.parse(cachedMarkets);
+        } else {
+          const res = await fetch("/markets-detailed");
+          if (res.ok) {
+            allMarkets = await res.json();
+            sessionStorage.setItem("tn_all_markets", JSON.stringify(allMarkets));
           }
-          setupMandiSearch();
-          await refreshDecisionAndMap();
         }
+        if (!currentMarket && allMarkets.length > 0) {
+          currentMarket = allMarkets[0].market;
+          localStorage.setItem("selected_mandi", currentMarket);
+        }
+        setupMandiSearch();
+        await refreshDecisionAndMap();
+        prefetchMapCrops();
       } catch (e) {
         console.error("Error fetching markets:", e);
       }
@@ -526,38 +538,87 @@
       document.getElementById("mandiSearchInput").value = currentMarket;
       document.getElementById("mandiSuggestions").classList.add("d-none");
       refreshDecisionAndMap();
+      prefetchMapCrops();
     }
 
     async function onCropChange(cropId) {
       currentCrop = cropId;
       localStorage.setItem("selected_crop", currentCrop);
       renderCropPills();
-      await refreshDecisionAndMap();
+      
+      const decKey = `${currentCrop.toLowerCase()}_${currentMarket.toLowerCase()}`;
+      const mapKey = currentCrop.toLowerCase();
+
+      // Instantaneous 0ms render if cached
+      if (clientMapDecisionCache[decKey] && clientMandisMapCache[mapKey]) {
+        allMarkets = clientMandisMapCache[mapKey];
+        currentDecisionData = clientMapDecisionCache[decKey];
+        renderMapMarkers(currentDecisionData);
+        renderDistrictLeaderboard(currentDecisionData);
+        // Silent background update
+        refreshDecisionAndMap(true);
+      } else {
+        await refreshDecisionAndMap();
+      }
     }
 
-    async function refreshDecisionAndMap() {
+    async function refreshDecisionAndMap(silent = false) {
       if (!currentMarket || !currentCrop) return;
-      try {
-        const [decisionRes, mandisMapRes] = await Promise.all([
-          fetch(`/decision/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`),
-          fetch(`/mandis-map/${encodeURIComponent(currentCrop)}`)
-        ]);
+      const decKey = `${currentCrop.toLowerCase()}_${currentMarket.toLowerCase()}`;
+      const mapKey = currentCrop.toLowerCase();
 
-        if (mandisMapRes.ok) {
-          const mapData = await mandisMapRes.json();
-          if (Array.isArray(mapData) && mapData.length > 0) {
-            allMarkets = mapData;
-          }
+      try {
+        const promises = [];
+        if (!clientMandisMapCache[mapKey]) {
+          promises.push(fetch(`/mandis-map/${encodeURIComponent(currentCrop)}`));
+        } else {
+          promises.push(Promise.resolve(null));
         }
 
-        if (decisionRes.ok) {
+        promises.push(fetch(`/decision/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`));
+
+        const [mapRes, decisionRes] = await Promise.all(promises);
+
+        if (mapRes && mapRes.ok) {
+          const mapData = await mapRes.json();
+          if (Array.isArray(mapData) && mapData.length > 0) {
+            clientMandisMapCache[mapKey] = mapData;
+            allMarkets = mapData;
+          }
+        } else if (clientMandisMapCache[mapKey]) {
+          allMarkets = clientMandisMapCache[mapKey];
+        }
+
+        if (decisionRes && decisionRes.ok) {
           currentDecisionData = await decisionRes.json();
+          clientMapDecisionCache[decKey] = currentDecisionData;
           renderMapMarkers(currentDecisionData);
           renderDistrictLeaderboard(currentDecisionData);
         }
       } catch (e) {
         console.error("Error refreshing decision and map:", e);
       }
+    }
+
+    function prefetchMapCrops() {
+      if (isPrefetchingMap) return;
+      isPrefetchingMap = true;
+      CROPS.forEach(c => {
+        const decKey = `${c.id.toLowerCase()}_${currentMarket.toLowerCase()}`;
+        const mapKey = c.id.toLowerCase();
+        if (!clientMandisMapCache[mapKey]) {
+          fetch(`/mandis-map/${encodeURIComponent(c.id)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => { if (data) clientMandisMapCache[mapKey] = data; })
+            .catch(() => {});
+        }
+        if (!clientMapDecisionCache[decKey]) {
+          fetch(`/decision/${encodeURIComponent(c.id)}/${encodeURIComponent(currentMarket)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(data => { if (data) clientMapDecisionCache[decKey] = data; })
+            .catch(() => {});
+        }
+      });
     }
 
     function switchDistrictMandi() {

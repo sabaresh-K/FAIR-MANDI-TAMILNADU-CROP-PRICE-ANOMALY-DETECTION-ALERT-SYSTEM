@@ -452,18 +452,30 @@
       `).join("");
     }
 
+    // High-speed client-side caches for instantaneous 0ms response
+    const clientHistoryCache = {};
+    const clientForecastCache = {};
+    let isPrefetchingAnalytics = false;
+
     async function fetchMarkets() {
       try {
-        const res = await fetch("/markets-detailed");
-        if (res.ok) {
-          allMarkets = await res.json();
-          if (!currentMarket && allMarkets.length > 0) {
-            currentMarket = allMarkets[0].market;
-            localStorage.setItem("selected_mandi", currentMarket);
+        const cachedMarkets = sessionStorage.getItem("tn_all_markets");
+        if (cachedMarkets) {
+          allMarkets = JSON.parse(cachedMarkets);
+        } else {
+          const res = await fetch("/markets-detailed");
+          if (res.ok) {
+            allMarkets = await res.json();
+            sessionStorage.setItem("tn_all_markets", JSON.stringify(allMarkets));
           }
-          setupMandiSearch();
-          await loadAnalyticsData();
         }
+        if (!currentMarket && allMarkets.length > 0) {
+          currentMarket = allMarkets[0].market;
+          localStorage.setItem("selected_mandi", currentMarket);
+        }
+        setupMandiSearch();
+        await loadAnalyticsData();
+        prefetchAnalyticsCrops();
       } catch (e) {
         console.error("Error fetching markets:", e);
       }
@@ -515,16 +527,30 @@
       document.getElementById("mandiSearchInput").value = getMandiDisplayName(currentMarket);
       document.getElementById("mandiSuggestions").classList.add("d-none");
       loadAnalyticsData();
+      prefetchAnalyticsCrops();
     }
 
     async function onCropChange(cropId) {
       currentCrop = cropId;
       localStorage.setItem("selected_crop", currentCrop);
       renderCropPills();
-      await loadAnalyticsData();
+      
+      const key = `${currentCrop.toLowerCase()}_${currentMarket.toLowerCase()}`;
+      if (clientHistoryCache[key] && clientForecastCache[key]) {
+        const historyData = clientHistoryCache[key];
+        const forecastData = clientForecastCache[key];
+        renderChart(historyData, forecastData);
+        renderPastHistoryTable(historyData);
+        renderFutureForecastTable(forecastData, historyData);
+        updateQuickStatCards(historyData, forecastData);
+        // Silent background update
+        loadAnalyticsData(true);
+      } else {
+        await loadAnalyticsData();
+      }
     }
 
-    async function loadAnalyticsData() {
+    async function loadAnalyticsData(silent = false) {
       if (!currentMarket || !currentCrop) return;
 
       const cropObj = CROPS.find(c => c.id === currentCrop) || { ta: currentCrop, en: currentCrop };
@@ -533,41 +559,41 @@
       const badge = document.getElementById("chartCropMandiBadge");
       if (badge) badge.innerText = `${cropLabel} - ${mandiLabel}`;
 
-      try {
-        let historyData = null;
-        let forecastData = null;
+      const key = `${currentCrop.toLowerCase()}_${currentMarket.toLowerCase()}`;
 
-        // Fetch History
-        try {
-          let histRes = await fetch(`/history/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
-          if (!histRes.ok) {
-            histRes = await fetch(`/prices/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
-          }
-          if (histRes.ok) {
-            historyData = await histRes.json();
-          }
-        } catch (err) {
-          console.warn("History fetch error:", err);
+      try {
+        let historyData = clientHistoryCache[key] || null;
+        let forecastData = clientForecastCache[key] || null;
+
+        const promises = [];
+        if (!historyData) {
+          promises.push(
+            fetch(`/history/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+          );
+        } else {
+          promises.push(Promise.resolve(historyData));
         }
 
-        // Fetch Forecast
-        try {
-          let fcRes = await fetch(`/forecast/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
-          if (fcRes.ok) {
-            forecastData = await fcRes.json();
-          } else {
-            const decRes = await fetch(`/decision/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`);
-            if (decRes.ok) {
-              const decData = await decRes.json();
-              forecastData = {
-                forecast: decData.forecast_7days || [],
-                commodity: currentCrop,
-                market: currentMarket
-              };
-            }
-          }
-        } catch (err) {
-          console.warn("Forecast fetch error:", err);
+        if (!forecastData) {
+          promises.push(
+            fetch(`/forecast/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`)
+              .then(r => r.ok ? r.json() : null)
+              .catch(() => null)
+          );
+        } else {
+          promises.push(Promise.resolve(forecastData));
+        }
+
+        const [hRes, fRes] = await Promise.all(promises);
+        if (hRes) {
+          historyData = hRes;
+          clientHistoryCache[key] = historyData;
+        }
+        if (fRes) {
+          forecastData = fRes;
+          clientForecastCache[key] = forecastData;
         }
 
         if (historyData && Array.isArray(historyData) && historyData.length > 0) {
@@ -578,6 +604,31 @@
         } else {
           document.getElementById("pastHistoryTableBody").innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">${currentLang === 'ta' ? 'விலை தரவு கிடைக்கவில்லை.' : 'No price records found.'}</td></tr>`;
           document.getElementById("futureForecastTableBody").innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted">${currentLang === 'ta' ? 'கணிப்பு தரவு கிடைக்கவில்லை.' : 'No forecast records found.'}</td></tr>`;
+        }
+      } catch (e) {
+        console.error("Error loading analytics data:", e);
+      }
+    }
+
+    function prefetchAnalyticsCrops() {
+      if (isPrefetchingAnalytics) return;
+      isPrefetchingAnalytics = true;
+      CROPS.forEach(c => {
+        const key = `${c.id.toLowerCase()}_${currentMarket.toLowerCase()}`;
+        if (!clientHistoryCache[key]) {
+          fetch(`/history/${encodeURIComponent(c.id)}/${encodeURIComponent(currentMarket)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (d) clientHistoryCache[key] = d; })
+            .catch(() => {});
+        }
+        if (!clientForecastCache[key]) {
+          fetch(`/forecast/${encodeURIComponent(c.id)}/${encodeURIComponent(currentMarket)}`)
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (d) clientForecastCache[key] = d; })
+            .catch(() => {});
+        }
+      });
+    }
         }
 
       } catch (e) {

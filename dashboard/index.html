@@ -572,18 +572,30 @@
       `).join("");
     }
 
+    // High-speed client-side caches for instantaneous 0ms response
+    const clientDecisionCache = {};
+    let cachedAllCropsList = null;
+    let cachedAllCropsMarket = null;
+
     async function fetchMarkets() {
       try {
-        const res = await fetch("/markets-detailed");
-        if (res.ok) {
-          allMarkets = await res.json();
-          if (!currentMarket && allMarkets.length > 0) {
-            currentMarket = allMarkets[0].market;
-            localStorage.setItem("selected_mandi", currentMarket);
+        const cachedMarkets = sessionStorage.getItem("tn_all_markets");
+        if (cachedMarkets) {
+          allMarkets = JSON.parse(cachedMarkets);
+        } else {
+          const res = await fetch("/markets-detailed");
+          if (res.ok) {
+            allMarkets = await res.json();
+            sessionStorage.setItem("tn_all_markets", JSON.stringify(allMarkets));
           }
-          setupMandiSearch();
-          await refreshOverviewData();
         }
+        if (!currentMarket && allMarkets.length > 0) {
+          currentMarket = allMarkets[0].market;
+          localStorage.setItem("selected_mandi", currentMarket);
+        }
+        setupMandiSearch();
+        await refreshOverviewData();
+        prefetchCropsForMarket(currentMarket);
       } catch (e) {
         console.error("Error fetching markets:", e);
       }
@@ -628,49 +640,92 @@
     }
 
     function selectMandi(marketName) {
-      currentMarket = marketName;
-      localStorage.setItem("selected_mandi", currentMarket);
+      if (currentMarket !== marketName) {
+        currentMarket = marketName;
+        localStorage.setItem("selected_mandi", currentMarket);
+        cachedAllCropsList = null;
+        cachedAllCropsMarket = null;
+      }
       document.getElementById("mandiSearchInput").value = currentMarket;
       document.getElementById("mandiSuggestions").classList.add("d-none");
       refreshOverviewData();
+      prefetchCropsForMarket(currentMarket);
     }
 
     async function onCropChange(cropId) {
       currentCrop = cropId;
       localStorage.setItem("selected_crop", currentCrop);
       renderCropPills();
-      await refreshOverviewData();
+      
+      const key = `${currentCrop.toLowerCase()}_${currentMarket.toLowerCase()}`;
+      
+      // 1. Instantaneous 0ms table row update
+      if (cachedAllCropsList) {
+        renderAllCropsTable(cachedAllCropsList);
+      }
+      
+      // 2. Instantaneous 0ms decision card update if cached
+      if (clientDecisionCache[key]) {
+        currentDecisionData = clientDecisionCache[key];
+        renderHeroStatCards(currentDecisionData);
+        renderDecisionBox(currentDecisionData);
+        // Silent background sync
+        refreshOverviewData(true);
+      } else {
+        await refreshOverviewData();
+      }
     }
 
-    async function refreshOverviewData() {
+    async function refreshOverviewData(silent = false) {
       if (!currentMarket || !currentCrop) return;
       document.getElementById("allCropsMandiBadge").innerText = getMandiDisplayName(currentMarket);
 
-      try {
-        const [decisionRes, allCropsRes] = await Promise.all([
-          fetch(`/decision/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`),
-          fetch(`/market-all-crops/${encodeURIComponent(currentMarket)}`)
-        ]);
+      const decisionKey = `${currentCrop.toLowerCase()}_${currentMarket.toLowerCase()}`;
 
-        if (decisionRes.ok) {
+      try {
+        const needAllCrops = !cachedAllCropsList || cachedAllCropsMarket !== currentMarket;
+        const promises = [
+          fetch(`/decision/${encodeURIComponent(currentCrop)}/${encodeURIComponent(currentMarket)}`)
+        ];
+        if (needAllCrops) {
+          promises.push(fetch(`/market-all-crops/${encodeURIComponent(currentMarket)}`));
+        }
+
+        const [decisionRes, allCropsRes] = await Promise.all(promises);
+
+        if (decisionRes && decisionRes.ok) {
           currentDecisionData = await decisionRes.json();
+          clientDecisionCache[decisionKey] = currentDecisionData;
           renderHeroStatCards(currentDecisionData);
           renderDecisionBox(currentDecisionData);
         }
 
-        if (allCropsRes.ok) {
+        if (allCropsRes && allCropsRes.ok) {
           const allCropsData = await allCropsRes.json();
-          renderAllCropsTable(allCropsData.crops || allCropsData);
-        } else {
-          const fbRes = await fetch(`/mandi-crops/${encodeURIComponent(currentMarket)}`);
-          if (fbRes.ok) {
-            const fbData = await fbRes.json();
-            renderAllCropsTable(fbData.crops || fbData);
-          }
+          cachedAllCropsList = allCropsData.crops || allCropsData;
+          cachedAllCropsMarket = currentMarket;
+          renderAllCropsTable(cachedAllCropsList);
+        } else if (cachedAllCropsList) {
+          renderAllCropsTable(cachedAllCropsList);
         }
       } catch (e) {
         console.error("Error refreshing overview data:", e);
       }
+    }
+
+    function prefetchCropsForMarket(market) {
+      if (!market) return;
+      CROPS.forEach(c => {
+        const key = `${c.id.toLowerCase()}_${market.toLowerCase()}`;
+        if (!clientDecisionCache[key]) {
+          fetch(`/decision/${encodeURIComponent(c.id)}/${encodeURIComponent(market)}`)
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+              if (data) clientDecisionCache[key] = data;
+            })
+            .catch(() => {});
+        }
+      });
     }
 
     function renderHeroStatCards(data) {

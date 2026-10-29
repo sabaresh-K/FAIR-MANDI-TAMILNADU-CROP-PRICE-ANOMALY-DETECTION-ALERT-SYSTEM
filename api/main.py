@@ -65,10 +65,15 @@ async def startup_event():
             c = sqlite3.connect(DB_PATH, timeout=30.0)
             c.execute("PRAGMA journal_mode=WAL;")
             c.execute("PRAGMA busy_timeout=30000;")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_mandi_prices_comm_mkt ON mandi_prices (LOWER(commodity), LOWER(market), date);")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_anomalies_comm_mkt ON anomalies (LOWER(commodity), LOWER(market), date);")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_mandi_prices_date_comm ON mandi_prices (date, LOWER(commodity));")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_mandi_prices_mkt_date ON mandi_prices (LOWER(market), date);")
+            c.execute("CREATE INDEX IF NOT EXISTS idx_anomalies_mkt_date ON anomalies (LOWER(market), date);")
             c.commit()
             c.close()
     except Exception as e:
-        logger.warning(f"Error configuring SQLite WAL mode: {e}")
+        logger.warning(f"Error configuring SQLite WAL mode & indexes: {e}")
 
     try:
         init_auth_tables()
@@ -254,6 +259,8 @@ def get_markets():
 @app.get("/markets-detailed")
 def get_markets_detailed():
     """Returns list of all markets with district and coordinates."""
+    if "markets_detailed" in _API_CACHE:
+        return _API_CACHE["markets_detailed"]
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -264,7 +271,9 @@ def get_markets_detailed():
     """)
     rows = cursor.fetchall()
     conn.close()
-    return [dict(r) for r in rows]
+    res = [dict(r) for r in rows]
+    _API_CACHE["markets_detailed"] = res
+    return res
 
 
 SUPPORTED_CROPS = [
@@ -291,6 +300,13 @@ SUPPORTED_CROPS = [
 ]
 
 
+# High-speed in-memory LRU/response cache for sub-millisecond repeat queries
+_API_CACHE: Dict[str, Any] = {}
+
+def clear_api_cache():
+    _API_CACHE.clear()
+
+
 @app.get("/crops")
 def get_supported_crops():
     """Returns supported crops with bilingual names and visual icons."""
@@ -303,6 +319,10 @@ def get_farmer_decision(commodity: str, market: str):
     Returns high-level Traffic Light Decision (Sell Now 🟢 / Hold 🔴 / Normal 🟡),
     bilingual advice, 7-day visual forecast, and nearby mandi arbitrage options.
     """
+    cache_key = f"decision_{commodity.strip().lower()}_{market.strip().lower()}"
+    if cache_key in _API_CACHE:
+        return _API_CACHE[cache_key]
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -363,6 +383,7 @@ def get_farmer_decision(commodity: str, market: str):
     decision_result["advice_ta"] = decision_result.get("explanation_ta", "")
     decision_result["advice_en"] = decision_result.get("explanation_en", "")
 
+    _API_CACHE[cache_key] = decision_result
     return decision_result
 
 
@@ -371,6 +392,10 @@ def get_market_all_crops(market: str):
     """
     Returns all crops and prices for a single district/mandi on the latest date.
     """
+    cache_key = f"allcrops_{market.strip().lower()}"
+    if cache_key in _API_CACHE:
+        return _API_CACHE[cache_key]
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(date) as max_date FROM mandi_prices WHERE LOWER(market) = LOWER(?);", (market,))
@@ -397,11 +422,13 @@ def get_market_all_crops(market: str):
     crops = [dict(r) for r in cursor.fetchall()]
     conn.close()
 
-    return {
+    res = {
         "market": market,
         "date": max_date,
         "crops": crops,
     }
+    _API_CACHE[cache_key] = res
+    return res
 
 
 @app.get("/mandi-crops/{market}")
@@ -415,6 +442,10 @@ def get_mandis_for_map(commodity: str):
     """
     Returns all Tamil Nadu mandis with lat/lng and latest price for a commodity.
     """
+    cache_key = f"map_{commodity.strip().lower()}"
+    if cache_key in _API_CACHE:
+        return _API_CACHE[cache_key]
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(date) as max_date FROM mandi_prices WHERE LOWER(commodity) = LOWER(?);", (commodity,))
@@ -436,6 +467,7 @@ def get_mandis_for_map(commodity: str):
     cursor.execute(query, (commodity, max_date))
     mandis = [dict(r) for r in cursor.fetchall()]
     conn.close()
+    _API_CACHE[cache_key] = mandis
     return mandis
 
 
@@ -444,6 +476,10 @@ def get_price_history(commodity: str, market: str):
     """
     Returns historical price series with trend line and anomaly flags for a (commodity, market) pair.
     """
+    cache_key = f"prices_{commodity.strip().lower()}_{market.strip().lower()}"
+    if cache_key in _API_CACHE:
+        return _API_CACHE[cache_key]
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -478,7 +514,9 @@ def get_price_history(commodity: str, market: str):
             detail=f"No price records found for commodity '{commodity}' in market '{market}'."
         )
 
-    return [dict(r) for r in rows]
+    res = [dict(r) for r in rows]
+    _API_CACHE[cache_key] = res
+    return res
 
 
 @app.get("/history/{commodity}/{market}")
@@ -492,6 +530,10 @@ def get_commodity_forecast(commodity: str, market: str):
     """
     Returns 7-day forecast projection, bounds, and indicators for (commodity, market).
     """
+    cache_key = f"fc_{commodity.strip().lower()}_{market.strip().lower()}"
+    if cache_key in _API_CACHE:
+        return _API_CACHE[cache_key]
+
     conn = get_db_connection()
     cursor = conn.cursor()
     query_history = """
@@ -517,7 +559,7 @@ def get_commodity_forecast(commodity: str, market: str):
     for f in forecast_list:
         f["forecast_modal_price"] = f.get("projected_price", 0)
 
-    return {
+    res = {
         "commodity": commodity,
         "market": market,
         "district": history_rows[-1].get("district", "Tamil Nadu"),
@@ -526,6 +568,8 @@ def get_commodity_forecast(commodity: str, market: str):
         "forecast": forecast_list,
         "days": len(forecast_list)
     }
+    _API_CACHE[cache_key] = res
+    return res
 
 
 @app.get("/alerts/today")
@@ -604,6 +648,7 @@ def trigger_pipeline():
     """
     try:
         df_result = run_pipeline()
+        clear_api_cache()
         return {
             "status": "success",
             "message": "Pipeline executed successfully.",
@@ -654,6 +699,7 @@ def trigger_live_refresh():
     try:
         from etl.fetch_live_real_prices import update_today_live_prices
         result = update_today_live_prices()
+        clear_api_cache()
         return result
     except Exception as e:
         logger.error(f"Error during live refresh: {e}")

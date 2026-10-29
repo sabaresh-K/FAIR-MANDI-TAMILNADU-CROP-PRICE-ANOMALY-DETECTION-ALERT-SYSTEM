@@ -749,9 +749,16 @@
 
     async function fetchMarketsDetailed() {
       try {
+        const cachedMarkets = sessionStorage.getItem("tn_all_markets");
+        if (cachedMarkets) {
+          allMarketsDetailed = JSON.parse(cachedMarkets);
+          filterMandisByDistrict(document.getElementById("regDistrict").value);
+          return;
+        }
         const res = await fetch("/markets-detailed");
         if (res.ok) {
           allMarketsDetailed = await res.json();
+          sessionStorage.setItem("tn_all_markets", JSON.stringify(allMarketsDetailed));
           filterMandisByDistrict(document.getElementById("regDistrict").value);
         }
       } catch (e) {
