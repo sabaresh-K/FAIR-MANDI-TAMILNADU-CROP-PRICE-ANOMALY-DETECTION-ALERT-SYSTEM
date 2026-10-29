@@ -386,6 +386,7 @@
     const DAYS_SHORT_EN = { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" };
 
     document.addEventListener("DOMContentLoaded", async () => {
+      updateLanguageUI();
       renderCropPills();
       await checkAuthSession();
       await fetchMarkets();
@@ -816,6 +817,7 @@
       });
 
       if (currentLang === 'ta') {
+        document.title = "விலை ஆய்வு & 7 நாள் கணிப்பு | Fair Mandi";
         document.getElementById("pageTitle").innerText = "விலை ஆய்வு & 7 நாள் கணிப்பு | Fair Mandi";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("navLiveFeedBadge").innerText = "24/7 சந்தை நேரலை";
@@ -850,6 +852,7 @@
         document.getElementById("footerNoteFc").innerText = "* முந்தைய 14 நாட்கள் சந்தை சுழற்சி அடிப்படையில் கணிக்கப்பட்டது";
         document.getElementById("footerBrandNote").innerText = "Fair Mandi — விலை ஆய்வு & 7 நாள் கணிப்பு முறைமை | 2026";
       } else {
+        document.title = "Price Analytics & 7-Day Forecast | Fair Mandi";
         document.getElementById("pageTitle").innerText = "Price Analytics & 7-Day Forecast | Fair Mandi";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("navLiveFeedBadge").innerText = "24/7 Live Mandi Feeds";

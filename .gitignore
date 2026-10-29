@@ -25,3 +25,7 @@ data/raw/*.csv
 Thumbs.db
 desktop.ini
 *.log
+
+# Reports and scratch documents
+*.docx
+*.pdf

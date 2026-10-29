@@ -379,6 +379,7 @@
     );
 
     document.addEventListener("DOMContentLoaded", async () => {
+      updateLanguageUI();
       initLeafletMap();
       renderCropPills();
       await checkAuthSession();

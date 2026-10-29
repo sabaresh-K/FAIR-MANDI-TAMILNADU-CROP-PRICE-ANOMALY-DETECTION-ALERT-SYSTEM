@@ -515,6 +515,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+      updateLanguageUI();
       renderCropPills();
       await checkAuthSession();
       await fetchMarkets();
@@ -895,6 +896,7 @@
       });
 
       if (currentLang === 'ta') {
+        document.title = "Fair Mandi | தமிழ்நாடு வேளாண் சந்தை விலை & ஆலோசனை";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("liveBadgeText").innerText = "24/7 APMC நேரலை";
         document.getElementById("lblSelectMandi").innerText = "📍 சந்தையைத் தேர்ந்தெடுக்கவும்:";
@@ -928,6 +930,7 @@
         document.getElementById("btnTeaserAnalytics").innerText = "📊 முழு ஆய்வை திறக்கவும் ➔";
         document.getElementById("footerText").innerText = "Fair Mandi — தமிழ்நாடு விவசாயிகள் மற்றும் வணிகர்களுக்கான நேரலை சந்தை நுண்ணறிவு மேடை | 2026";
       } else {
+        document.title = "Fair Mandi | Tamil Nadu Crop Prices & Trading Advisory";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("liveBadgeText").innerText = "24/7 APMC Live";
         document.getElementById("lblSelectMandi").innerText = "📍 Select Mandi:";

@@ -346,6 +346,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+      updateLanguageUI();
       await checkAuthSession();
       updateLanguageUI();
     });
@@ -584,6 +585,7 @@
       });
 
       if (currentLang === 'ta') {
+        document.title = "விவசாயி சுயவிவரம் & 1-கிளிக் SMS எச்சரிக்கை அமைப்புகள் | Fair Mandi";
         document.getElementById("pageTitle").innerText = "விவசாயி சுயவிவரம் & 1-கிளிக் SMS எச்சரிக்கை அமைப்புகள் | Fair Mandi";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("navLiveFeedBadge").innerText = "24/7 சந்தை நேரலை";
@@ -612,6 +614,7 @@
         document.getElementById("thHistAction").innerText = "செயல்";
         document.getElementById("footerBrandNote").innerText = "Fair Mandi — விவசாயி சுயவிவரம் & 1-கிளிக் மொபைல் SMS எச்சரிக்கை மேலாண்மை | 2026";
       } else {
+        document.title = "Farmer Profile & 1-Click Mobile SMS Alert Settings | Fair Mandi";
         document.getElementById("pageTitle").innerText = "Farmer Profile & 1-Click Mobile SMS Alert Settings | Fair Mandi";
         document.getElementById("navLogoText").innerText = "Fair Mandi";
         document.getElementById("navLiveFeedBadge").innerText = "24/7 Live Mandi Feeds";

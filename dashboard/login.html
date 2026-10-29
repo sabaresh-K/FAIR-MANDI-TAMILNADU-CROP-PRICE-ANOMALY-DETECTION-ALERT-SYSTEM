@@ -653,6 +653,7 @@
 
     // Initialize Page
     document.addEventListener("DOMContentLoaded", async () => {
+      applyTranslations();
       populateDistricts();
       renderCropPills();
       await fetchDatabaseStatus();
@@ -701,6 +702,7 @@
 
     function applyTranslations() {
       const t = I18N[currentLang];
+      document.title = t.pageTitle;
       document.getElementById("pageTitle").innerText = t.pageTitle;
       document.getElementById("navLogo").innerText = t.navLogo;
       document.getElementById("navBackText").innerText = t.navBackText;
